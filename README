@@ -1,3 +1,8 @@
+MachSuite is available!
+
+Feel free to clone this repository and use MachSuite.
+We are currently fixing the test harness bugs and making larger inputs as many of you have already requested :).
+
 # MachSuite
 
 MachSuite is a benchmark suite intended for accelerator centric research.
