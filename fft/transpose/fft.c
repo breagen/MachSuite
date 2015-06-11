@@ -91,7 +91,7 @@ void twiddles8(TYPE a_x[8], TYPE a_y[8], int i, int n){
 {                                               \
     TYPE exp_1_8_x, exp_1_4_x, exp_3_8_x;	\
     TYPE exp_1_8_y, exp_1_4_y, exp_3_8_y;	\
-    TYPE tmp_1, tmp_2;			\
+    TYPE tmp_1;			\
     exp_1_8_x =  1;				\
     exp_1_8_y = -1;				\
     exp_1_4_x =  0;				\
@@ -138,7 +138,7 @@ void loady8(TYPE a_y[], TYPE x[], int offset, int sx){
 }
 
 void fft1D_512(TYPE work_x[512], TYPE work_y[512]){
-    int tid, hi, lo, i, j, stride;
+    int tid, hi, lo, stride;
     int reversed[] = {0,4,2,6,1,5,3,7};
     TYPE DATA_x[THREADS*8];
     TYPE DATA_y[THREADS*8];

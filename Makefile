@@ -19,6 +19,8 @@ BENCHMARKS=\
 	stencil/stencil3d \
 	viterbi/viterbi
 
+CFLAGS=-O3 -Wall -Wno-unused-label
+
 build:
 	@( for b in $(BENCHMARKS); do $(MAKE) CFLAGS="$(CFLAGS)" -C $$b || exit ; done )
 

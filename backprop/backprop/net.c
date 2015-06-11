@@ -26,7 +26,7 @@ void update_layer(int numIn, int numOut, TYPE weightsIn[MAX_ROWS][MAX_COLS], TYP
 void update(TYPE weights[][MAX_ROWS][MAX_COLS], 
         TYPE *input,
         TYPE activations[][MAX_ROWS]){
-    int i, j;
+    int i;
 
     //initialize first activation layer to be the inputs to the nnet..
     u_1 : for(i = 0; i < layer_size[0]; i++){
@@ -40,7 +40,7 @@ void update(TYPE weights[][MAX_ROWS][MAX_COLS],
 }
 
 void propagate_error_out(TYPE *activationsOut, TYPE *deltas, TYPE *targets){
-    int i, j;
+    int i;
     TYPE error;
     error = 0.0;
 
@@ -141,7 +141,7 @@ void backprop(TYPE weights[NUM_LAYERS - 1][MAX_ROWS][MAX_COLS],
         TYPE inputs[NUM_TRAIN][SIZE_IN], 
         TYPE targets[NUM_TRAIN][SIZE_OUT]){
 
-    int ee, rows, cols, jj, II, JJ;
+    int ee, rows, cols, jj;
     TYPE error;
     error = 0.0;
 

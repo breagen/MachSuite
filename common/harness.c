@@ -39,7 +39,7 @@ int main(int argc, char **argv)
   run_benchmark( input );
   //#if WRITE_OUTPUT
   //FIXME: Maybe remove this.
-  int out_fd, i, written=0;
+  int out_fd, written=0;
   char *ptr = input;
   out_fd = open("output.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( out_fd>0 && "Couldn't open output data file" );

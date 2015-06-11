@@ -47,7 +47,6 @@ void bfs(node_t nodes[N_NODES], edge_t edges[N_EDGES],
   node_index_t dummy;
   node_index_t n;
   edge_index_t e;
-  int i;
 
   /*init_levels: for( n=0; n<N_NODES; n++ )*/
   /*level[n] = MAX_LEVEL;*/

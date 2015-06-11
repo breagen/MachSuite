@@ -41,7 +41,6 @@ void bfs(node_t nodes[N_NODES], edge_t edges[N_EDGES],
   node_index_t n;
   edge_index_t e;
   level_t horizon;
-  int i;
   edge_index_t cnt;
 
   level[starting_node] = 0;

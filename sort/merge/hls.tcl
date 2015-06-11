@@ -5,7 +5,7 @@ add_files input.data
 add_files check.data
 add_files -tb ../../common/harness.c
 
-set_top mergesort
+set_top ms_mergesort
 
 open_solution -reset solution
 set_part virtex7

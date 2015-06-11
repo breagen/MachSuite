@@ -9,7 +9,7 @@
 
 #include "merge.h"
 // Fake benchmark function to satisfy the extern
-void mergesort(int a[size]) { }
+void ms_mergesort(int a[size]) { }
 
 void generate_binary()
 {

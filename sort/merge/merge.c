@@ -59,7 +59,7 @@ void merge(int a[size], int start, int m, int stop){
     }
 }
 
-void mergesort(int a[size]){
+void ms_mergesort(int a[size]){
     int start, stop;
     int i, m, from, mid, to;
 
