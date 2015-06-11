@@ -1,0 +1,14 @@
+language: c
+compiler:
+  - clang
+  - gcc
+script:
+  - make build CFLAGS="-Wall -Werror -Wno-unused-label"
+# A nudge to avoid checking in broken builds.
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+    recipients:
+      - reagen@fas.harvard.edu
+      - rdadolf@seas.harvard.edu

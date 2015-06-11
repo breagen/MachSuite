@@ -1,11 +1,8 @@
-MachSuite is available!
-
-Feel free to clone this repository and use MachSuite.
-We are currently fixing the test harness bugs and making larger inputs as many of you have already requested :).
-
 # MachSuite
 
-MachSuite is a benchmark suite intended for accelerator centric research.
+[![build status](https://travis-ci.org/rdadolf/MachSuite.svg?branch=master)](https://travis-ci.org/rdadolf/MachSuite)
+
+MachSuite is a benchmark suite intended for accelerator-centric research.
 
 There is a Makefile in the top direcrory as well as one within each benchmark
 subdirectory.
@@ -27,10 +24,10 @@ look in the LICENSE file for details.
 
 If you use the code, we would appreciate it if you cite the following paper:
 
-  Brandon Reagen, Robert Adolf, Sophia Yakun Shao, Gu-Yeon Wei, and David Brooks.
-  "MachSuite: Benchmarks for Accelerator Design and Customized Architectures."
+> Brandon Reagen, Robert Adolf, Sophia Yakun Shao, Gu-Yeon Wei, and David Brooks.
+> *"MachSuite: Benchmarks for Accelerator Design and Customized Architectures."*
   2014 IEEE International Symposium on Workload Characterization.
 
-For any questions/concerns, please email: reagen@fas.harvard.edu
+For any questions/concerns, please email [reagen@fas.harvard.edu](reagen@fas.harvard.edu)
 
 Enjoy!!

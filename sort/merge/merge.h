@@ -34,7 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define size 4096
 
-void mergesort(int a[size]);
+void ms_mergesort(int a[size]);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Test harness interface code.
@@ -46,7 +46,7 @@ int INPUT_SIZE = sizeof(struct bench_args_t);
 
 void run_benchmark( void *vargs ) {
   struct bench_args_t *args = (struct bench_args_t *)vargs;
-  mergesort( args->a);
+  ms_mergesort( args->a);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
