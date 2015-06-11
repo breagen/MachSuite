@@ -1,6 +1,6 @@
 ---
 title: MachSuite
-layout: front
+layout: default
 ---
 # Benchmarks for Accelerator Design and Customized Architectures
 
