@@ -1,6 +1,6 @@
 # MachSuite
 
-[![build status](https://travis-ci.org/rdadolf/MachSuite.svg?branch=master)](https://travis-ci.org/rdadolf/MachSuite)
+[![build status](https://travis-ci.org/breagen/MachSuite.svg?branch=master)](https://travis-ci.org/breagen/MachSuite)
 
 MachSuite is a benchmark suite intended for accelerator-centric research.
 
