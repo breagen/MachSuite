@@ -104,8 +104,8 @@ void update(int b[N], int bucket[BUCKETSIZE], int a[N], int exp)
 }
 
 void ss_sort(int a[N], int b[N], int bucket[BUCKETSIZE], int sum[SCAN_RADIX]){
-    int i, exp, flag;
-    i = 0; exp = 0; flag = 0;
+    int exp, flag;
+    exp = 0; flag = 0;
 
     sort_1 : for (exp = 0; exp < 32; exp+=2){
         init(bucket);
