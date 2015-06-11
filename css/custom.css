@@ -1,6 +1,6 @@
 #nav {
   background-color: #303030;
-  background-image: url("assets/stripes.svg");
+  background-image: url("{{site.baseurl}}/assets/stripes.svg");
   background-repeat: no-repeat;
   background-position: right center;
   margin-bottom: 0px;
