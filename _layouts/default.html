@@ -10,7 +10,7 @@
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/custom.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/css/custom.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,7 +24,7 @@
     <div id="header-zone">
     <div class="container">
       <div class="col-md-12">
-        <img id="header-image" src="assets/mach1.png" class="img-responsive center-block" alt="1969 Mach 1 Mustang">
+        <img id="header-image" src="{{site.baseurl}}assets/mach1.png" class="img-responsive center-block" alt="1969 Mach 1 Mustang">
       </div>
     </div>
     </div>
@@ -40,7 +40,6 @@
             </div>
             <div class="navbar-right">
               <a class="btn btn-default navbar-btn" href="https://github.com/breagen/MachSuite/" role="button">View on github</a>
-              <!--<a class="btn btn-default navbar-btn" href="github" role="button">github</a>-->
             </div>
           </div>
         </div>
@@ -50,7 +49,7 @@
     <!-- Content -->
     <div class="container">
       <div class="col-sm-12">
-        {{page.content}}
+        {{content}}
       </div>
     </div>
   </div>
