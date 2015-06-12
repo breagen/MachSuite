@@ -7,21 +7,32 @@
 extern int INPUT_SIZE;
 void run_benchmark( void *args );
 
+//#define CHECK_OUTPUT
+
 int main(int argc, char **argv)
 {
   int status;
-  char *in_file, *check_file;
-  int in_fd, check_fd;
-  char *input, *check;
+  int in_fd;
+  char *in_file;
+  char *input;
+  #ifdef CHECK_OUTPUT
+  int check_fd;
+  char *check_file;
+  char *check;
+  #endif
   int n;
 
   //assert( argc==3 && "Usage: ./benchmark <input_file> <check_file>" );
   in_file = "input.data";
+  #ifdef CHECK_OUTPUT
   check_file = "check.data";
+  #endif
   if( argc>1 )
     in_file = argv[1];
+  #ifdef CHECK_OUTPUT
   if( argc>2 )
     check_file = argv[2];
+  #endif
 
   // Load input data
   input = malloc(INPUT_SIZE);
@@ -53,6 +64,7 @@ int main(int argc, char **argv)
   //#endif
 
   // Load check data
+  #ifdef CHECK_OUTPUT
   check = malloc(INPUT_SIZE);
   assert( check!=NULL && "Out of memory" );
   check_fd = open( check_file, O_RDONLY );
@@ -63,6 +75,7 @@ int main(int argc, char **argv)
     n += status;
   }
   close(check_fd);
+  #endif
 
   // Validate benchmark results
   //assert( !memcmp(input,check,INPUT_SIZE) && "Benchmark results are incorrect" );
