@@ -14,9 +14,9 @@
   width: 100%;
   z-index: 100;
 }
-.navbar.container {
+/*.navbar.container {
   height: 70px;
-}
+}*/
 
 #machsuite-title {
   text-shadow: -0px 0 0.2px black, 0 0px 0.2px black, 0px 0 0.2px black, 0 -0px 0.2px black;
@@ -32,4 +32,9 @@
 #header-zone {
   background-color: #000000;
   width: 100%;
+}
+
+
+body {
+  text-decoration: 300;
 }
