@@ -75,10 +75,10 @@ int main(int argc, char **argv)
     n += status;
   }
   close(check_fd);
-  #endif
 
   // Validate benchmark results
-  //assert( !memcmp(input,check,INPUT_SIZE) && "Benchmark results are incorrect" );
+  assert( !memcmp(input,check,INPUT_SIZE) && "Benchmark results are incorrect" );
+  #endif
 
   printf("Success.\n");
   return 0;
