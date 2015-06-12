@@ -6,10 +6,29 @@ layout: default
 
 MachSuite is a set of 19 benchmarks designed to mimic low-level kernels suitable for hardware acceleration.
 
- - [The Benchmarks](#benchmarks)
- - [Compiling and Running MachSuite](#usage)
+A full description, including characterization of all the algorithms, can be found in our [IISWC paper](http://www.eecs.harvard.edu/~reagen/papers/machsuite.pdf). If you use MachSite in your research, we'd appreciate a [citation]({{site.baseurl}}/bibtex.html).
 
-### <a name="benchmarks">The Benchmarks</a>
+For questions, please contact [Brandon Reagen](mailto:reagen@fas.harvard.edu).
+
+ - [Compiling and Running MachSuite](#usage)
+ - [The Benchmarks](#benchmarks)
+
+### <a name="usage"></a>Compiling and Running MachSuite
+
+To compile, just run `make`! There is a top-level Makefile which will recursively invoke the ones in each benchmark subdirectory.
+You can also use this makefile to run all the MachSuite benchmarks at once using `make run`.
+
+If you prefer to do it piecewise, each benchmark can be invoked using the same command line:
+
+    <benchmark> [input-file] [check-file]
+
+Where `input-file` contains the inputs given in each benchmark's subdirectory, and `check-file` is the answer file to check the output of the benchmark against. Both are optional&mdash;if you don't specify them, the benchmark will look for an `input.data` and a `check.data` file in the current directory.
+
+Note that checking is disabled in the code by default, so you can safely leave off the `check-file` argument.
+
+<a href="#" class="btn btn-default btn-small"><span class="glyphicon glyphicon-triangle-top"/> Top </a>
+
+### <a name="benchmarks"></a>The Benchmarks
 
 Kernel/Algorithm | Description
 --- | ---
@@ -33,27 +52,5 @@ Kernel/Algorithm | Description
 `stencil/stencil2d` | A three-dimensional stencil computation, using a 7-point von Neumann stencil.
 `viterbi/viterbi` | A dynamic programing method for computing probabilities on a Hidden Markov model.
 
-### <a name="usage">Compiling and Running MachSuite</a>
+<a href="#" class="btn btn-default btn-small"><span class="glyphicon glyphicon-triangle-top"/> Top </a>
 
-To compile, just run `make`! There is a top-level Makefile which will recursively invoke the ones in each benchmark subdirectory.
-You can also use this makefile to run all the MachSuite benchmarks at once using `make run`.
-
-If you prefer to do it piecewise, each benchmark can be invoked using the same command line:
-
-    <benchmark> [input-file] [check-file]
-
-Where `input-file` contains the inputs given in each benchmark's subdirectory, and `check-file` is the answer file to check the output of the benchmark against. Both are optional&mdash;if you don't specify them, the benchmark will look for an `input.data` and a `check.data` file in the current directory.
-
-Note that checking is disabled in the code by default, so you can safely leave off the `check-file` argument.
-
-### Citing
-
-If you use the code, we would appreciate it if you cite the following paper:
-
-> Brandon Reagen, Robert Adolf, Sophia Yakun Shao, Gu-Yeon Wei, and David Brooks.
-> *"MachSuite: Benchmarks for Accelerator Design and Customized Architectures."*
-  2014 IEEE International Symposium on Workload Characterization.
-
-For any questions/concerns, please email [reagen@fas.harvard.edu](reagen@fas.harvard.edu)
-
-Enjoy!!
