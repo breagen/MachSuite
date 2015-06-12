@@ -15,7 +15,7 @@ For questions, please contact [Brandon Reagen](mailto:reagen@fas.harvard.edu).
 
 ### <a name="usage"></a>Compiling and Running MachSuite
 
-To compile, just run `make`! There is a top-level Makefile which will recursively invoke the ones in each benchmark subdirectory.
+To compile, just run `make`. There is a top-level Makefile which will recursively invoke the ones in each benchmark subdirectory.
 You can also use this makefile to run all the MachSuite benchmarks at once using `make run`.
 
 If you prefer to do it piecewise, each benchmark can be invoked using the same command line:
