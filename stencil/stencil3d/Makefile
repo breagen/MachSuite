@@ -1,11 +1,11 @@
-stencil3d: stencil3d.c stencil3d.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o stencil3d stencil3d.c ../../common/harness.c
+stencil: stencil.c stencil.h ../../common/harness.c
+	$(CC) $(CFLAGS) -o stencil stencil.c ../../common/harness.c
 
-hls: stencil3d.c stencil3d.h
+hls: stencil.c stencil.h
 	vivado_hls hls.tcl
 
-run: stencil3d input.data check.data
-	./stencil3d input.data check.data
+run: stencil input.data check.data
+	./stencil input.data check.data
 
 clean:
-	rm -f stencil3d
+	rm -f stencil

@@ -10,7 +10,7 @@
 #define FROM_FILE
 //#define FROM_RANDOM
 
-#include "ellpack.h"
+#include "spmv.h"
 // Fake benchmark function to satisfy the extern
 void ellpack(TYPE nzval[N*L], int cols[N*L], TYPE vec[N], TYPE out[N]) { }
 

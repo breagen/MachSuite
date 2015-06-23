@@ -1,11 +1,11 @@
-crs: crs.c crs.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o crs crs.c ../../common/harness.c
+spmv: spmv.c spmv.h ../../common/harness.c
+	$(CC) $(CFLAGS) -o spmv spmv.c ../../common/harness.c
 
-run: crs input.data check.data
-	./crs input.data check.data
+run: spmv input.data check.data
+	./spmv input.data check.data
 
-hls: crs.c crs.h	
+hls: spmv.c spmv.h	
 	vivado_hls hls.tcl
 
 clean:
-	rm -f crs
+	rm -f spmv

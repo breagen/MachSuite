@@ -1,11 +1,11 @@
-bbgemm: bbgemm.c bbgemm.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o bbgemm bbgemm.c ../../common/harness.c
+gemm: gemm.c gemm.h ../../common/harness.c
+	$(CC) $(CFLAGS) -o gemm gemm.c ../../common/harness.c
 
-hls: bbgemm.c bbgemm.h
+hls: gemm.c gemm.h
 	vivado_hls hls.tcl
 
-run: bbgemm input.data check.data
-	./bbgemm input.data check.data
+run: gemm input.data check.data
+	./gemm input.data check.data
 
 clean:
-	rm -f bbgemm
+	rm -f gemm

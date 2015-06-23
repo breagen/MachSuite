@@ -1,11 +1,11 @@
-ellpack: ellpack.c ellpack.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o ellpack ellpack.c ../../common/harness.c
+spmv: spmv.c spmv.h ../../common/harness.c
+	$(CC) $(CFLAGS) -o spmv spmv.c ../../common/harness.c
 
-run: ellpack input.data check.data
-	./ellpack input.data check.data
+run: spmv input.data check.data
+	./spmv input.data check.data
 
-hls: ellpack.c ellpack.h
+hls: spmv.c spmv.h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f ellpack
+	rm -f spmv

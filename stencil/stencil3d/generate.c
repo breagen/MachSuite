@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <assert.h>
 
-#include "stencil3d.h"
+#include "stencil.h"
 // Fake benchmark function to satisfy the extern
 void stencil3d( TYPE C0, TYPE C1, TYPE orig[row_size * col_size * height_size],
                 TYPE sol[row_size * col_size * height_size] ) { }

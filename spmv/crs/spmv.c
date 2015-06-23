@@ -27,36 +27,27 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-implementation based on algorithm described in:
-"Stencil computation optimization and auto-tuning on state-of-the-art multicore architectures"
-K. Datta, M. Murphy, V. Volkov, S. Williams, J. Carter, L. Oliker, D. Patterson, J. Shalf, K. Yelick
-SC 2008
+
+Based on algorithm described here:
+http://www.cs.berkeley.edu/~mhoemmen/matrix-seminar/slides/UCB_sparse_tutorial_1.pdf
 */
 
-#include "stencil3d.h"
+#include "spmv.h"
 
-void stencil3d(TYPE C0, TYPE C1, TYPE orig[size], TYPE sol[size]) {
-    int i, j, k;
-    TYPE sum1, sum2, mul1, mul2, diff;
+void spmv(TYPE val[NNZ], int cols[NNZ], int rowDelimiters[N+1], TYPE vec[N], TYPE out[N]){
+    int i, j;
+    TYPE sum, Si;
 
-    loop_height : for(i = 1; i < height_size - 1; i++){
-        loop_col : for(j = 1; j < col_size - 1; j++){
-            loop_row : for(k = 1; k < row_size - 1; k++){
-                sum1 = orig[indx(row_size, col_size, i, j, k + 1)] +
-                       orig[indx (row_size, col_size, i, j, k - 1)] +
-                       orig[indx (row_size, col_size, i, j + 1, k)] +
-                       orig[indx (row_size, col_size, i, j - 1, k)] +
-                       orig[indx (row_size, col_size, i + 1, j, k)] +
-                       orig[indx (row_size, col_size, i - 1, j, k)];
-
-                sum2 = orig[indx (row_size, col_size, i, j, k)];
-
-                mul2 = sum2 * C0;
-                mul1 = sum1 * C1;
-                diff = mul1 - mul2;
-
-                sol[indx(row_size, col_size, i, j, k)] = diff;
-            }
+    spmv_1 : for(i = 0; i < N; i++){
+        sum = 0; Si = 0;
+        int tmp_begin = rowDelimiters[i];
+        int tmp_end = rowDelimiters[i+1];
+        spmv_2 : for (j = tmp_begin; j < tmp_end; j++){
+            Si = val[j] * vec[cols[j]];
+            sum = sum + Si;
         }
+        out[i] = sum;
     }
 }
+
+

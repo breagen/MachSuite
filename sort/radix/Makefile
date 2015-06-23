@@ -1,11 +1,11 @@
-radix: radix.c radix.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o radix radix.c ../../common/harness.c
+sort: sort.c sort.h ../../common/harness.c
+	$(CC) $(CFLAGS) -o sort sort.c ../../common/harness.c
 
-run: radix input.data check.data
-	./radix input.data check.data
+run: sort input.data check.data
+	./sort input.data check.data
 
-hls: radix.c radix.h
+hls: sort.c sort.h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f radix
+	rm -f sort

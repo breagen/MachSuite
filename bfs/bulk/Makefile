@@ -1,11 +1,11 @@
-bulk: bulk.c bulk.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o bulk bulk.c ../../common/harness.c
+bfs: bfs.c bfs.h ../../common/harness.c
+	$(CC) $(CFLAGS) -o bfs bfs.c ../../common/harness.c
 
-run: bulk input.data check.data
-	./bulk input.data check.data
+run: bfs input.data check.data
+	./bfs input.data check.data
 
-hls: bulk.c bulk.h
+hls: bfs.c bfs.h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f bulk
+	rm -f bfs

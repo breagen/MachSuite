@@ -10,7 +10,7 @@
 #define FROM_FILE
 //#define FROM_RANDOM
 
-#include "crs.h"
+#include "spmv.h"
 // Fake benchmark function to satisfy the extern
 void spmv(TYPE val[NNZ], int cols[NNZ], int rowDelimiters[N + 1],
           TYPE vec[N], TYPE out[N]) { }

@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <assert.h>
 
-#include "merge.h"
+#include "sort.h"
 // Fake benchmark function to satisfy the extern
 void ms_mergesort(int a[size]) { }
 

@@ -7,8 +7,8 @@
 #include <unistd.h>
 #include <assert.h>
 
-#include "radix.h"
-// Fake benchmark function to satisfy the extern in radix.h
+#include "sort.h"
+// Fake benchmark function to satisfy the extern in sort.h
 //void ss_sort(int a[N], int b[N], int bucket[BUCKETSIZE], int sum[SCAN_RADIX]) {}
 
 void generate_binary()

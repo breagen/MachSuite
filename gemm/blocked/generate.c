@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <assert.h>
 
-#include "bbgemm.h"
+#include "gemm.h"
 // Fake benchmark function to satisfy the extern
 void bbgemm(TYPE m1[N], TYPE m2[N], TYPE prod[N]) { }
 

@@ -31,7 +31,7 @@ implementation based on:
 Hong, Oguntebi, Olukotun. "Efficient Parallel Graph Exploration on Multi-Core CPU and GPU." PACT, 2011.
 */
 
-#include "queue.h"
+#include "bfs.h"
 
 #define Q_PUSH(node) { queue[q_in==0?N_NODES-1:q_in-1]=node; q_in=(q_in+1)%N_NODES; }
 #define Q_PEEK() (queue[q_out])

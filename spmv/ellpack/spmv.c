@@ -27,27 +27,23 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 Based on algorithm described here:
 http://www.cs.berkeley.edu/~mhoemmen/matrix-seminar/slides/UCB_sparse_tutorial_1.pdf
 */
 
-#include "crs.h"
+#include "spmv.h"
 
-void spmv(TYPE val[NNZ], int cols[NNZ], int rowDelimiters[N+1], TYPE vec[N], TYPE out[N]){
+void ellpack(TYPE nzval[N*L], int cols[N*L], TYPE vec[N], TYPE out[N])
+{
     int i, j;
-    TYPE sum, Si;
+    TYPE Si;
 
-    spmv_1 : for(i = 0; i < N; i++){
-        sum = 0; Si = 0;
-        int tmp_begin = rowDelimiters[i];
-        int tmp_end = rowDelimiters[i+1];
-        spmv_2 : for (j = tmp_begin; j < tmp_end; j++){
-            Si = val[j] * vec[cols[j]];
-            sum = sum + Si;
+    ellpack_1 : for (i=0; i<N; i++) {
+        TYPE sum = out[i];
+        ellpack_2 : for (j=0; j<L; j++) {
+                Si = nzval[j + i*L] * vec[cols[j + i*L]];
+                sum += Si;
         }
         out[i] = sum;
     }
 }
-
-

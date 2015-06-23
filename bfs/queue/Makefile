@@ -1,11 +1,11 @@
-queue: queue.c queue.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o queue queue.c ../../common/harness.c
+bfs: bfs.c bfs.h ../../common/harness.c
+	$(CC) $(CFLAGS) -o bfs bfs.c ../../common/harness.c
 
-run: queue input.data check.data
-	./queue input.data check.data
+run: bfs input.data check.data
+	./bfs input.data check.data
 
-hls: queue.c queue.h
+hls: bfs.c bfs.h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f queue
+	rm -f bfs

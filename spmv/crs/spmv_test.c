@@ -1,5 +1,5 @@
 //http://www.cs.berkeley.edu/~mhoemmen/matrix-seminar/slides/UCB_sparse_tutorial_1.pdf
-#include "crs.h"
+#include "spmv.h"
 
 #define ran (TYPE)(((double) rand() / (MAX)) * (MAX-MIN) + MIN)
 

@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <assert.h>
 
-#include "net.h"
+#include "backprop.h"
 // Fake benchmark function to satisfy the extern
 void backprop(TYPE weights[NUM_LAYERS - 1][MAX_ROWS][MAX_COLS],
         TYPE inputs[NUM_TRAIN][SIZE_IN],

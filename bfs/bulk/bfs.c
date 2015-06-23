@@ -27,23 +27,44 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Based on algorithm described here:
-http://www.cs.berkeley.edu/~mhoemmen/matrix-seminar/slides/UCB_sparse_tutorial_1.pdf
+implementations based on:
+Harish and Narayanan. "Accelerating large graph algorithms on the GPU using CUDA." HiPC, 2007.
+Hong, Oguntebi, Olukotun. "Efficient Parallel Graph Exploration on Multi-Core CPU and GPU." PACT, 2011.
 */
 
-#include "ellpack.h"
+#include "bfs.h"
 
-void ellpack(TYPE nzval[N*L], int cols[N*L], TYPE vec[N], TYPE out[N])
+void bfs(node_t nodes[N_NODES], edge_t edges[N_EDGES],
+            node_index_t starting_node, level_t level[N_NODES],
+            edge_index_t level_counts[N_LEVELS])
 {
-    int i, j;
-    TYPE Si;
+  node_index_t n;
+  edge_index_t e;
+  level_t horizon;
+  edge_index_t cnt;
 
-    ellpack_1 : for (i=0; i<N; i++) {
-        TYPE sum = out[i];
-        ellpack_2 : for (j=0; j<L; j++) {
-                Si = nzval[j + i*L] * vec[cols[j + i*L]];
-                sum += Si;
+  level[starting_node] = 0;
+  level_counts[0] = 1;
+
+  loop_horizons: for( horizon=0; horizon<N_LEVELS; horizon++ ) {
+    cnt = 0;
+    // Add unmarked neighbors of the current horizon to the next horizon
+    loop_nodes: for( n=0; n<N_NODES; n++ ) {
+      if( level[n]==horizon ) {
+        edge_index_t tmp_begin = nodes[n].edge_begin;
+        edge_index_t tmp_end = nodes[n].edge_end;
+        loop_neighbors: for( e=tmp_begin; e<tmp_end; e++ ) {
+          node_index_t tmp_dst = edges[e].dst;
+          level_t tmp_level = level[tmp_dst];
+
+          if( tmp_level ==MAX_LEVEL ) { // Unmarked
+            level[tmp_dst] = horizon+1;
+            ++cnt;
+          }
         }
-        out[i] = sum;
+      }
     }
+    if( (level_counts[horizon+1]=cnt)==0 )
+      break;
+  }
 }

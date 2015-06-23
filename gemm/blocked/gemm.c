@@ -27,44 +27,32 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-implementations based on:
-Harish and Narayanan. "Accelerating large graph algorithms on the GPU using CUDA." HiPC, 2007.
-Hong, Oguntebi, Olukotun. "Efficient Parallel Graph Exploration on Multi-Core CPU and GPU." PACT, 2011.
+Implementation based on algorithm described in:
+The cache performance and optimizations of blocked algorithms
+M. D. Lam, E. E. Rothberg, and M. E. Wolf
+ASPLOS 1991
 */
 
-#include "bulk.h"
+#include "gemm.h"
 
-void bfs(node_t nodes[N_NODES], edge_t edges[N_EDGES],
-            node_index_t starting_node, level_t level[N_NODES],
-            edge_index_t level_counts[N_LEVELS])
-{
-  node_index_t n;
-  edge_index_t e;
-  level_t horizon;
-  edge_index_t cnt;
+void bbgemm(TYPE m1[N], TYPE m2[N], TYPE prod[N]){
+    int i, k, j, jj, kk, temp_x;
+    int i_row, k_row;
+    TYPE mul;
 
-  level[starting_node] = 0;
-  level_counts[0] = 1;
-
-  loop_horizons: for( horizon=0; horizon<N_LEVELS; horizon++ ) {
-    cnt = 0;
-    // Add unmarked neighbors of the current horizon to the next horizon
-    loop_nodes: for( n=0; n<N_NODES; n++ ) {
-      if( level[n]==horizon ) {
-        edge_index_t tmp_begin = nodes[n].edge_begin;
-        edge_index_t tmp_end = nodes[n].edge_end;
-        loop_neighbors: for( e=tmp_begin; e<tmp_end; e++ ) {
-          node_index_t tmp_dst = edges[e].dst;
-          level_t tmp_level = level[tmp_dst];
-
-          if( tmp_level ==MAX_LEVEL ) { // Unmarked
-            level[tmp_dst] = horizon+1;
-            ++cnt;
-          }
+    loopjj:for (jj = 0; jj < row_size; jj += block_size){
+        loopkk:for (kk = 0; kk < row_size; kk += block_size){
+            loopi:for ( i = 0; i < row_size; ++i){
+                loopk:for (k = 0; k < block_size; ++k){
+                    i_row = i * row_size;
+                    k_row = (k  + kk) * row_size;
+                    temp_x = m1[i_row + k + kk];
+                    loopj:for (j = 0; j < block_size; ++j){
+                        mul = temp_x * m2[k_row + j + jj];
+                        prod[i_row + j + jj] += mul;
+                    }
+                }
+            }
         }
-      }
     }
-    if( (level_counts[horizon+1]=cnt)==0 )
-      break;
-  }
 }

@@ -28,7 +28,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "merge.h"
+#include "sort.h"
 int temp[size];
 
 void merge(int a[size], int start, int m, int stop){

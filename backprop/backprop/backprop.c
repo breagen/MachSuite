@@ -1,4 +1,4 @@
-#include "net.h"
+#include "backprop.h"
 
 //Activation function..
 TYPE sigmoid(TYPE x){
