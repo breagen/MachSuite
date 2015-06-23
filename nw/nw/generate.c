@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <assert.h>
 
-#include "needwun.h"
+#include "nw.h"
 // Fake benchmark function to satisfy the extern
 
 void needwun(char SEQA[N], char SEQB[M], char alignedA[sum_size], char alignedB[sum_size],

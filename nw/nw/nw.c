@@ -28,7 +28,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "needwun.h"
+#include "nw.h"
 
 void needwun(char SEQA[N], char SEQB[M], char alignedA[sum_size], char alignedB[sum_size],
              int A[dyn_size], char ptr[dyn_size]){

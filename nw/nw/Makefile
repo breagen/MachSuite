@@ -1,11 +1,11 @@
-needwun: needwun.c needwun.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o needwun needwun.c ../../common/harness.c
+nw: nw.c nw.h ../../common/harness.c
+	$(CC) $(CFLAGS) -o nw nw.c ../../common/harness.c
 
-run: needwun input.data check.data
-	./needwun input.data check.data
+run: nw input.data check.data
+	./nw input.data check.data
 
-hls: needwun.c needwun.h
+hls: nw.c nw.h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f needwun
+	rm -f nw
