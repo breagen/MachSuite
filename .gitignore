@@ -1,4 +1,5 @@
 output.data
+generate
 aes/aes/aes
 backprop/backprop/backprop
 bfs/bulk/bfs

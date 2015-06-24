@@ -2,8 +2,18 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <assert.h>
+
+// Fake stubs, usually implemented per-benchmark
+void run_benchmark( void *vargs ) {}
+void input_to_data(int fd, void *vdata) {}
+void output_to_data(int fd, void *vdata) {}
+void data_to_output(int fd, void *vdata) {}
+int check_data(void *vdata, void *vref) {return 0;}
+int INPUT_SIZE;
+
 
 #define generate_test_TYPE_array(TYPE) \
 void test_##TYPE##_array() { \
@@ -17,7 +27,7 @@ void test_##TYPE##_array() { \
   for(i=0; i<10; i++) { \
     a[i] = (TYPE)i; \
   } \
-  write_##TYPE##array(fd, a, 10); \
+  write_##TYPE##_array(fd, a, 10); \
   close(fd); \
   fd = open("testfile", O_RDONLY); \
   assert(fd>1 && "Couldn't open file to read test input"); \

@@ -1,103 +1,42 @@
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 #include <inttypes.h>
-#include <fcntl.h>
-#include <assert.h>
-#include <errno.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
 
 ///// File and section functions
-
-char *readfile(int fd) {
-  char *p; 
-  struct stat s;
-  off_t len;
-
-  assert(fd>1 && "Invalid file descriptor");
-  assert(0==fstat(fd, &s) && "Couldn't determine file size");
-  len = s.st_size;
-  assert(len>0 && "File is empty");
-  p = mmap(NULL, len, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0); 
-  assert(p!=NULL && "Couldn't mmap file");
-  close(fd); // Does not un-map *p
-  return p;
-}
-
-char *find_section_start(char *s, int n) {
-  int i=0;
-
-  // Find the nth "%%\n" substring (if *s==0, there wasn't one)
-  while(i<n && (*s)!=(char)0) {
-    // This comparison will short-circuit before overrunning the string, so no length check.
-    if( s[0]=='%' && s[1]=='%' && s[2]=='\n' ) {
-      i++;
-    }
-    s++;
-  }
-  if(*s!=(char)0)
-    return s+3; // %%\n"<string>"
-  return s; // ""
-}
+char *readfile(int fd);
+char *find_section_start(char *s, int n);
 
 ///// Array read functions
-#define generate_parse_TYPE_array(TYPE, STRTOTYPE) \
-int parse_##TYPE##_array(char *s, TYPE *arr, int n) { \
-  char *line, *endptr; \
-  int i=0; \
-  TYPE v; \
-  \
-  assert(s!=NULL && "Invalid input string"); \
-  \
-  line = strsep(&s,"\n"); \
-  while( line!=NULL && i<n ) { \
-    endptr = line; \
-    errno=0; \
-    v = (TYPE)(STRTOTYPE(line, &endptr)); \
-    assert((*endptr)==(char)0 && "Invalid input character"); \
-    assert(errno==0 && "Couldn't convert the string"); \
-    arr[i] = v; \
-    i++; \
-    line = strsep(&s,"\n"); \
-  } \
-  \
-  return 0; \
-}
-
-#define strtol_10(a,b) strtol(a,b,10)
-generate_parse_TYPE_array(uint8_t, strtol_10)
-generate_parse_TYPE_array(uint16_t, strtol_10)
-generate_parse_TYPE_array(uint32_t, strtol_10)
-generate_parse_TYPE_array(uint64_t, strtol_10)
-generate_parse_TYPE_array(int8_t, strtol_10)
-generate_parse_TYPE_array(int16_t, strtol_10)
-generate_parse_TYPE_array(int32_t, strtol_10)
-generate_parse_TYPE_array(int64_t, strtol_10)
-
-generate_parse_TYPE_array(float, strtof)
-generate_parse_TYPE_array(double, strtod)
+int parse_uint8_t_array(char *s, uint8_t *arr, int n);
+int parse_uint16_t_array(char *s, uint16_t *arr, int n);
+int parse_uint32_t_array(char *s, uint32_t *arr, int n);
+int parse_uint64_t_array(char *s, uint64_t *arr, int n);
+int parse_int8_t_array(char *s, int8_t *arr, int n);
+int parse_int16_t_array(char *s, int16_t *arr, int n);
+int parse_int32_t_array(char *s, int32_t *arr, int n);
+int parse_int64_t_array(char *s, int64_t *arr, int n);
+int parse_float_array(char *s, float *arr, int n);
+int parse_double_array(char *s, double *arr, int n);
 
 ///// Array write functions
-// Not strictly necessary, but nice for future-proofing.
-#define generate_write_TYPE_array(TYPE, FORMAT) \
-int write_##TYPE##array(int fd, TYPE *arr, int n) { \
-  int i; \
-  for( i=0; i<n; i++ ) { \
-    dprintf(fd, "%" FORMAT "\n", arr[i]); \
-  } \
-  return 0; \
-}
+int write_uint8_t_array(int fd, uint8_t *arr, int n);
+int write_uint16_t_array(int fd, uint16_t *arr, int n);
+int write_uint32_t_array(int fd, uint32_t *arr, int n);
+int write_uint64_t_array(int fd, uint64_t *arr, int n);
+int write_int8_t_array(int fd, int8_t *arr, int n);
+int write_int16_t_array(int fd, int16_t *arr, int n);
+int write_int32_t_array(int fd, int32_t *arr, int n);
+int write_int64_t_array(int fd, int64_t *arr, int n);
+int write_float_array(int fd, float *arr, int n);
+int write_double_array(int fd, double *arr, int n);
 
-generate_write_TYPE_array(uint8_t, PRIu8)
-generate_write_TYPE_array(uint16_t, PRIu16)
-generate_write_TYPE_array(uint32_t, PRIu32)
-generate_write_TYPE_array(uint64_t, PRIu64)
-generate_write_TYPE_array(int8_t, PRId8)
-generate_write_TYPE_array(int16_t, PRId16)
-generate_write_TYPE_array(int32_t, PRId32)
-generate_write_TYPE_array(int64_t, PRId64)
+int write_section_header(int fd);
 
-generate_write_TYPE_array(float, "f")
-generate_write_TYPE_array(double, "f")
+///// Per-benchmark files
+void run_benchmark( void *vargs );
+void input_to_data(int fd, void *vdata);
+void data_to_input(int fd, void *vdata);
+void output_to_data(int fd, void *vdata);
+void data_to_output(int fd, void *vdata);
+int check_data(void *vdata, void *vref);
+
+extern int INPUT_SIZE;
