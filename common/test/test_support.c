@@ -19,7 +19,9 @@ void test_##TYPE##_array() { \
   } \
   write_##TYPE##array(fd, a, 10); \
   close(fd); \
-  p = readfile("testfile"); \
+  fd = open("testfile", O_RDONLY); \
+  assert(fd>1 && "Couldn't open file to read test input"); \
+  p = readfile(fd); \
   assert( parse_##TYPE##_array(p, a, 10)==0 ); \
   for(i=0; i<10; i++) { \
     assert(a[i]==((TYPE)i)); \
@@ -33,8 +35,12 @@ generate_test_TYPE_array(float)
 generate_test_TYPE_array(double)
 
 void test_section_jumping() {
+  int fd;
   char *p;
-  p = readfile("input_sections");
+
+  fd = open("input_sections", O_RDONLY);
+  assert(fd>1 && "Couldn't open file to read test input");
+  p = readfile(fd);
 }
 
 int main(int argc, char **argv)

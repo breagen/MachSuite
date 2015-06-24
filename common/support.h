@@ -11,15 +11,12 @@
 
 ///// File and section functions
 
-char *readfile(char *filename) {
-  int fd; 
+char *readfile(int fd) {
   char *p; 
   struct stat s;
   off_t len;
 
-  assert(filename!=NULL);
-  fd = open(filename, O_RDONLY);
-  assert(fd>1 && "Couldn't open file");
+  assert(fd>1 && "Invalid file descriptor");
   assert(0==fstat(fd, &s) && "Couldn't determine file size");
   len = s.st_size;
   assert(len>0 && "File is empty");

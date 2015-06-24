@@ -9,3 +9,4 @@ test_support: test_support.c ../support.h
 clean:
 	rm -f test_support
 	rm -rf test_support.dSYM
+	rm -f testfile
