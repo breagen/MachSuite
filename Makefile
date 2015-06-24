@@ -1,5 +1,6 @@
 BENCHMARKS=\
 	aes/aes \
+#FIXME\
 	backprop/backprop \
 	bfs/bulk \
 	bfs/queue \
