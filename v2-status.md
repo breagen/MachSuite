@@ -3,7 +3,7 @@
 ## Updated benchmarks
 
 Benchmark | Kernel | Generator | Checker
---- | ---
+--------- | ------ | --------- | -------
 `backprop` | | |
 `viterbi` | | |
 
@@ -29,7 +29,7 @@ checker summary key:
  - (+) additional work needed
 
 Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summary) | checker (description)
---- | ---
+--------- | ---- | ------- | -------- | --- | ---------------- | ----------------- | ---------------------
 `aes/aes` | | | | | |C|string compare
 `backprop/backprop` | | | | | |+?|(more work needed)
 `bfs/bulk` | | | | | |A|horizon counts
@@ -52,7 +52,7 @@ Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summar
 
 ## Large Inputs
 Benchmark | Generator | header | kernel | size tuned | runtime tuned
---- | ---
+--------- | --------- | ------ | ------ | ---------- | -------------
 `aes/aes` | | | | |
 `backprop/backprop` | | | | |
 `bfs/bulk` | | | | |
