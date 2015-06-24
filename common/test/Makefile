@@ -1,11 +1,11 @@
 CFLAGS=-Wall -Werror
 
-test: input_* test_check
-	./test_check
+test: input_* test_support
+	./test_support
 
-test_check: test_check.c ../check.h
-	cc -o test_check $(CFLAGS) -I.. test_check.c
+test_support: test_support.c ../support.h
+	cc -o test_support $(CFLAGS) -I.. test_support.c
 
 clean:
-	rm -f test_check
-	rm -rf test_check.dSYM
+	rm -f test_support
+	rm -rf test_support.dSYM

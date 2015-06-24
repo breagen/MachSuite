@@ -81,3 +81,25 @@ generate_parse_TYPE_array(int64_t, strtol_10)
 generate_parse_TYPE_array(float, strtof)
 generate_parse_TYPE_array(double, strtod)
 
+///// Array write functions
+// Not strictly necessary, but nice for future-proofing.
+#define generate_write_TYPE_array(TYPE, FORMAT) \
+int write_##TYPE##array(int fd, TYPE *arr, int n) { \
+  int i; \
+  for( i=0; i<n; i++ ) { \
+    fprintf(fd, FORMAT "\n", arr[i]); \
+  } \
+  return 0; \
+}
+
+generate_write_TYPE_array(uint8_t, PRIu8)
+generate_write_TYPE_array(uint16_t, PRIu16)
+generate_write_TYPE_array(uint32_t, PRIu32)
+generate_write_TYPE_array(uint64_t, PRIu64)
+generate_write_TYPE_array(int8_t, PRId8)
+generate_write_TYPE_array(int16_t, PRId16)
+generate_write_TYPE_array(int32_t, PRId32)
+generate_write_TYPE_array(int64_t, PRId64)
+
+generate_write_TYPE_array(float, "%f")
+generate_write_TYPE_array(double, "%f")

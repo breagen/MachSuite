@@ -9,9 +9,7 @@ void run_benchmark( void *args );
 
 //#define CHECK_OUTPUT
 
-#ifdef CHECK_OUTPUT
-#include "check.h"
-#endif
+#include "support.h"
 
 int main(int argc, char **argv)
 {

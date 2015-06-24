@@ -1,4 +1,4 @@
-#include "check.h"
+#include "support.h"
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
