@@ -30,7 +30,7 @@ checker summary key:
 
 Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summary) | checker (description)
 --------- | ---- | ------- | -------- | --- | ---------------- | ----------------- | ---------------------
-`aes/aes` | | | | | |C|string compare
+`aes/aes` |X|X|X|X|X|C|string compare
 `backprop/backprop` | | | | | |+?|(more work needed)
 `bfs/bulk` | | | | | |A|horizon counts
 `bfs/queue` | | | | | |A|horizon counts
