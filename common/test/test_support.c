@@ -2,15 +2,24 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
+#include <fcntl.h>
 #include <assert.h>
 
 #define generate_test_TYPE_array(TYPE) \
 void test_##TYPE##_array() { \
   char *p; \
   TYPE a[10]; \
-  int i; \
+  int i, fd; \
   \
-  p = readfile("input_" #TYPE "_10"); \
+  /* Write output */ \
+  fd = open("testfile", O_WRONLY|O_CREAT|O_TRUNC, 0666); \
+  assert(fd>1 && "Couldn't open file to write test output"); \
+  for(i=0; i<10; i++) { \
+    a[i] = (TYPE)i; \
+  } \
+  write_##TYPE##array(fd, a, 10); \
+  close(fd); \
+  p = readfile("testfile"); \
   assert( parse_##TYPE##_array(p, a, 10)==0 ); \
   for(i=0; i<10; i++) { \
     assert(a[i]==((TYPE)i)); \

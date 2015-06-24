@@ -19,12 +19,13 @@ char *readfile(char *filename) {
 
   assert(filename!=NULL);
   fd = open(filename, O_RDONLY);
-  assert(fd>1);
-  assert(0==fstat(fd, &s));
+  assert(fd>1 && "Couldn't open file");
+  assert(0==fstat(fd, &s) && "Couldn't determine file size");
   len = s.st_size;
-  assert(len>0);
+  assert(len>0 && "File is empty");
   p = mmap(NULL, len, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0); 
-  assert(p!=NULL);
+  assert(p!=NULL && "Couldn't mmap file");
+  close(fd); // Does not un-map *p
   return p;
 }
 
@@ -51,15 +52,15 @@ int parse_##TYPE##_array(char *s, TYPE *arr, int n) { \
   int i=0; \
   TYPE v; \
   \
-  assert(s!=NULL); /* Invalid input string */ \
+  assert(s!=NULL && "Invalid input string"); \
   \
   line = strsep(&s,"\n"); \
   while( line!=NULL && i<n ) { \
     endptr = line; \
     errno=0; \
     v = (TYPE)(STRTOTYPE(line, &endptr)); \
-    assert((*endptr)==(char)0); /* Invalid input character */ \
-    assert(errno==0); /* Couldn't convert the string */ \
+    assert((*endptr)==(char)0 && "Invalid input character"); \
+    assert(errno==0 && "Couldn't convert the string"); \
     arr[i] = v; \
     i++; \
     line = strsep(&s,"\n"); \
@@ -87,7 +88,7 @@ generate_parse_TYPE_array(double, strtod)
 int write_##TYPE##array(int fd, TYPE *arr, int n) { \
   int i; \
   for( i=0; i<n; i++ ) { \
-    fprintf(fd, FORMAT "\n", arr[i]); \
+    dprintf(fd, "%" FORMAT "\n", arr[i]); \
   } \
   return 0; \
 }
@@ -101,5 +102,5 @@ generate_write_TYPE_array(int16_t, PRId16)
 generate_write_TYPE_array(int32_t, PRId32)
 generate_write_TYPE_array(int64_t, PRId64)
 
-generate_write_TYPE_array(float, "%f")
-generate_write_TYPE_array(double, "%f")
+generate_write_TYPE_array(float, "f")
+generate_write_TYPE_array(double, "f")
