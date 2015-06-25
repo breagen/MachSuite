@@ -24,7 +24,7 @@ void input_to_data(int fd, void *vdata) {
   p = readfile(fd);
   // Section 1: key
   s = find_section_start(p,1);
-  parse_uint8_t_array(s, data->ctx.key, 32);
+  parse_uint8_t_array(s, data->k, 32);
   // Section 2: input-text
   s = find_section_start(p,2);
   parse_uint8_t_array(s, data->buf, 16);
@@ -34,7 +34,7 @@ void data_to_input(int fd, void *vdata) {
   struct bench_args_t *data = (struct bench_args_t *)vdata;
   // Section 1
   write_section_header(fd);
-  write_uint8_t_array(fd, data->ctx.key, 32);
+  write_uint8_t_array(fd, data->k, 32);
   // Section 2
   write_section_header(fd);
   write_uint8_t_array(fd, data->buf, 16);
