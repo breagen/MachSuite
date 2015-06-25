@@ -135,8 +135,8 @@ generate_write_TYPE_array(int16_t, PRId16)
 generate_write_TYPE_array(int32_t, PRId32)
 generate_write_TYPE_array(int64_t, PRId64)
 
-generate_write_TYPE_array(float, "f")
-generate_write_TYPE_array(double, "f")
+generate_write_TYPE_array(float, ".16f")
+generate_write_TYPE_array(double, ".16f")
 
 int write_section_header(int fd) {
   assert(fd>1 && "Invalid file descriptor");

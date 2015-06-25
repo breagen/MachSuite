@@ -3,8 +3,7 @@
 
 int INPUT_SIZE = sizeof(struct bench_args_t);
 
-#define EPSILON 1e-6
-//#define EPSILON 1e-12
+#define EPSILON 1e-15
 
 void run_benchmark( void *vargs ) {
   struct bench_args_t *args = (struct bench_args_t *)vargs;
@@ -59,9 +58,9 @@ void data_to_input(int fd, void *vdata) {
 
 /* Output format:
 %% Section 1
-double: signal (real part)
+double: freq (real part)
 %% Section 2
-double: signal (complex part)
+double: freq (complex part)
 */
 
 void output_to_data(int fd, void *vdata) {
