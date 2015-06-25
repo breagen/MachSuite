@@ -3,7 +3,9 @@ compiler:
   - clang
   - gcc
 script:
-  - make build CFLAGS="-Wall -Werror -Wno-unused-label"
+  - make clean && make build CFLAGS="-O3 -Wall -Werror -Wno-unused-label"
+  - make clean && make run CFLAGS="-O3 -Wall -Werror -Wno-unused-label"
+  - make clean && make generate CFLAGS="-O3 -Wall -Werror -Wno-unused-label"
 # A nudge to avoid checking in broken builds.
 notifications:
   email:

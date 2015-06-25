@@ -1,6 +1,8 @@
 KERN=gemm
 ALG=blocked
 
+CFLAGS?=-O3 -Wall -Wno-unused-label
+
 SRCS=$(KERN).c support.c ../../common/support.c
 FILES=$(SRCS) $(KERN).h ../../common/support.h
 

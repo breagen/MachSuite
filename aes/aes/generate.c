@@ -12,8 +12,7 @@
 int main(int argc, char **argv) {
   struct bench_args_t data;
   uint8_t initial_contents[16] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
-  char *ptr;
-  int status, i, fd, written=0;
+  int i, fd;
 
   // Fill data structure
   //memset(&data.ctx, 0, sizeof(aes256_context));

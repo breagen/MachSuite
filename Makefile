@@ -26,7 +26,10 @@ build:
 	@( for b in $(BENCHMARKS); do $(MAKE) CFLAGS="$(CFLAGS)" -C $$b || exit ; done )
 
 run:
-	@( for b in $(BENCHMARKS); do $(MAKE) -C $$b run || exit ; done )
+	@( for b in $(BENCHMARKS); do $(MAKE) CFLAGS="$(CFLAGS)" -C $$b run || exit ; done )
+
+generate:
+	@( for b in $(BENCHMARKS); do $(MAKE) CFLAGS="$(CFLAGS)" -C $$b generate || exit ; done )
 
 clean:
 	@( for b in $(BENCHMARKS); do $(MAKE) -C $$b clean || exit ; done )
