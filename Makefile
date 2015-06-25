@@ -3,9 +3,9 @@ BENCHMARKS=\
 	bfs/bulk \
 	bfs/queue \
 	fft/strided \
+	fft/transpose \
 #FIXME\
 	backprop/backprop \
-	fft/transpose \
 	gemm/ncubed \
 	gemm/blocked \
 	kmp/kmp \
