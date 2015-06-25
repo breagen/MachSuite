@@ -7,6 +7,7 @@ Hong, Oguntebi, Olukotun. "Efficient Parallel Graph Exploration on Multi-Core CP
 #include <inttypes.h>
 #include <stdio.h>
 #include <string.h>
+#include "support.h"
 
 // Terminology (but not values) from graph500 spec
 //   graph density = 2^-(2*SCALE - EDGE_FACTOR)
@@ -48,13 +49,5 @@ struct bench_args_t {
   level_t level[N_NODES];
   edge_index_t level_counts[N_LEVELS];
 };
-int INPUT_SIZE = sizeof(struct bench_args_t);
 
 void bfs(node_t nodes[N_NODES], edge_t edges[N_EDGES], node_index_t starting_node, level_t level[N_NODES], edge_index_t level_counts[N_LEVELS]);
-
-void run_benchmark( void *vargs ) {
-  struct bench_args_t *args = (struct bench_args_t *)vargs;
-  bfs(args->nodes, args->edges, args->starting_node, args->level, args->level_counts);
-}
-
-////////////////////////////////////////////////////////////////////////////////

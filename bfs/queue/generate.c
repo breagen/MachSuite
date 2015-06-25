@@ -24,15 +24,11 @@
 #endif
 
 #include "bfs.h"
-// Fake benchmark function to satisfy the extern
 
-void bfs(node_t nodes[N_NODES], edge_t edges[N_EDGES], node_index_t starting_node, level_t level[N_NODES], edge_index_t level_counts[N_LEVELS]) { }
-
-void generate_binary()
+int main(int argc, char **argv)
 {
   struct bench_args_t data;
-  char *ptr;
-  int status, i, fd, written=0;
+  int fd;
   node_index_t adjmat[N_NODES][N_NODES]; // This is small enough to be fine.
   node_index_t r,c,s,temp;
   edge_index_t e;
@@ -110,24 +106,10 @@ void generate_binary()
   } while( (data.nodes[rint].edge_end-data.nodes[rint].edge_begin)<2 );
   data.starting_node = rint;
 
-  // Fill data structure
-  memset(data.level, MAX_LEVEL, N_NODES*sizeof(level_t));
-  memset(data.level_counts, 0, N_LEVELS*sizeof(edge_index_t));
-
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( fd>0 && "Couldn't open input data file" );
+  data_to_input(fd, &data);
 
-  ptr = (char *) &data;
-  while( written<sizeof(data) ) {
-    status = write( fd, ptr, sizeof(data)-written );
-    assert( status>=0 && "Couldn't write input data file" );
-    written += status;
-  }
-}
-
-int main(int argc, char **argv)
-{
-  generate_binary();
   return 0;
 }
