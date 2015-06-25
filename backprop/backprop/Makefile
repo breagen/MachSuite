@@ -1,11 +1,21 @@
-backprop: backprop.c backprop.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o backprop backprop.c ../../common/harness.c -lm
+KERN=backprop
+ALG=backprop
 
-run: backprop input.data check.data
-	./backprop input.data check.data
+SRCS=$(KERN).c support.c ../../common/support.c
+FILES=$(SRCS) $(KERN).h ../../common/support.h
 
-hls: backprop.c backprop.h
+$(KERN): $(FILES) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+
+run: $(KERN) input.data check.data
+	./$(KERN) input.data check.data
+
+generate: $(FILES) generate.c
+	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c
+
+hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f backprop
+	rm -f $(KERN)
+	rm -f generate

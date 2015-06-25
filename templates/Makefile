@@ -1,5 +1,5 @@
-KERN=fft
-ALG=strided
+KERN=FIXME
+ALG=FIXME
 
 SRCS=$(KERN).c support.c ../../common/support.c
 FILES=$(SRCS) $(KERN).h ../../common/support.h

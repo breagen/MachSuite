@@ -1,11 +1,21 @@
-stencil: stencil.c stencil.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o stencil stencil.c ../../common/harness.c
+KERN=stencil
+ALG=stencil3d
 
-hls: stencil.c stencil.h
+SRCS=$(KERN).c support.c ../../common/support.c
+FILES=$(SRCS) $(KERN).h ../../common/support.h
+
+$(KERN): $(FILES) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+
+run: $(KERN) input.data check.data
+	./$(KERN) input.data check.data
+
+generate: $(FILES) generate.c
+	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c
+
+hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
 
-run: stencil input.data check.data
-	./stencil input.data check.data
-
 clean:
-	rm -f stencil
+	rm -f $(KERN)
+	rm -f generate

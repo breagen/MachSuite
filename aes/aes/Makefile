@@ -1,18 +1,21 @@
-SRCS=aes.c support.c ../../common/support.c
-FILES=$(SRCS) aes.h ../../common/support.h
+KERN=aes
+ALG=aes
 
-aes: $(FILES) ../../common/harness.c
-	$(CC) $(CFLAGS) -I../../common -o aes $(SRCS) ../../common/harness.c
+SRCS=$(KERN).c support.c ../../common/support.c
+FILES=$(SRCS) $(KERN).h ../../common/support.h
 
-run: aes input.data check.data
-	./aes input.data check.data
+$(KERN): $(FILES) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+
+run: $(KERN) input.data check.data
+	./$(KERN) input.data check.data
 
 generate: $(FILES) generate.c
 	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c
 
-hls: aes.c aes.h
+hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f aes
+	rm -f $(KERN)
 	rm -f generate

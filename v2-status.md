@@ -31,24 +31,24 @@ checker summary key:
 Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summary) | checker (description)
 --------- | ---- | ------- | -------- | --- | ---------------- | ----------------- | ---------------------
 `aes/aes` |X|X|X|X|X|C|string compare
-`backprop/backprop` | | | | | |+?|(more work needed)
-`bfs/bulk` | | | | | |A|horizon counts
-`bfs/queue` | | | | | |A|horizon counts
-`fft/strided` | | | | | |A+|compare array ±eps; new input (known signal from combination of frequencies); check freq spikes
-`fft/transpose` | | | | | |A+|compare array ±eps; new input (known signal from combination of frequencies); check freq spikes
-`gemm/ncubed` | | | | | |A+|compare matrix ±eps; change data type to float
-`gemm/blocked` | | | | | |A+|compare matrix ±eps; change data type to float
-`kmp/kmp` | | | | | |1|match count
-`md/knn` | | | | | |A|compare positions ±eps
-`md/grid` | | | | | |A|compare positions ±eps
-`nw/nw` | | | | | |C|Compare aligned sequences
-`sort/merge` | | | | | |1+|Check sortedness and sum
-`sort/radix` | | | | | |1+|Check sortedness and sum
-`spmv/crs` | | | | | |A|Compare vector ±eps
-`spmv/ellpack` | | | | | |A|Compare vector ±eps
-`stencil/stencil2d` | | | | | |A|Compare matrix
-`stencil/stencil3d` | | | | | |A|Compare matrix
-`viterbi/viterbi` | | | | | |+?|(more work needed)
+`backprop/backprop` |X| | | | |+?|(more work needed)
+`bfs/bulk` |X| | | | |A|horizon counts
+`bfs/queue` |X| | | | |A|horizon counts
+`fft/strided` |X| | | | |A+|compare array ±eps; new input (known signal from combination of frequencies); check freq spikes
+`fft/transpose` |X| | | | |A+|compare array ±eps; new input (known signal from combination of frequencies); check freq spikes
+`gemm/ncubed` |X| | | | |A+|compare matrix ±eps; change data type to float
+`gemm/blocked` |X| | | | |A+|compare matrix ±eps; change data type to float
+`kmp/kmp` |X| | | | |1|match count
+`md/knn` |X| | | | |A|compare positions ±eps
+`md/grid` |X| | | | |A|compare positions ±eps
+`nw/nw` |X| | | | |C|Compare aligned sequences
+`sort/merge` |X| | | | |1+|Check sortedness and sum
+`sort/radix` |X| | | | |1+|Check sortedness and sum
+`spmv/crs` |X| | | | |A|Compare vector ±eps
+`spmv/ellpack` |X| | | | |A|Compare vector ±eps
+`stencil/stencil2d` |X| | | | |A|Compare matrix
+`stencil/stencil3d` |X| | | | |A|Compare matrix
+`viterbi/viterbi` |X| | | | |+?|(more work needed)
 
 ## Large Inputs
 Benchmark | Generator | header | kernel | size tuned | runtime tuned

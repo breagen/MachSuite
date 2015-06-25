@@ -1,11 +1,21 @@
-nw: nw.c nw.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o nw nw.c ../../common/harness.c
+KERN=nw
+ALG=nw
 
-run: nw input.data check.data
-	./nw input.data check.data
+SRCS=$(KERN).c support.c ../../common/support.c
+FILES=$(SRCS) $(KERN).h ../../common/support.h
 
-hls: nw.c nw.h
+$(KERN): $(FILES) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+
+run: $(KERN) input.data check.data
+	./$(KERN) input.data check.data
+
+generate: $(FILES) generate.c
+	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c
+
+hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f nw
+	rm -f $(KERN)
+	rm -f generate

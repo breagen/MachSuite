@@ -1,11 +1,21 @@
-viterbi: viterbi.c viterbi.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o viterbi viterbi.c ../../common/harness.c
+KERN=viterbi
+ALG=viterbi
 
-run: viterbi input.data check.data
-	./viterbi input.data check.data
+SRCS=$(KERN).c support.c ../../common/support.c
+FILES=$(SRCS) $(KERN).h ../../common/support.h
 
-hls: viterbi.c viterbi.h
+$(KERN): $(FILES) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+
+run: $(KERN) input.data check.data
+	./$(KERN) input.data check.data
+
+generate: $(FILES) generate.c
+	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c
+
+hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f viterbi
+	rm -f $(KERN)
+	rm -f generate
