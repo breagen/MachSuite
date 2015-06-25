@@ -106,10 +106,6 @@ int main(int argc, char **argv)
   } while( (data.nodes[rint].edge_end-data.nodes[rint].edge_begin)<2 );
   data.starting_node = rint;
 
-  // Fill data structure
-  memset(data.level, MAX_LEVEL, N_NODES*sizeof(level_t));
-  memset(data.level_counts, 0, N_LEVELS*sizeof(edge_index_t));
-
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( fd>0 && "Couldn't open input data file" );
