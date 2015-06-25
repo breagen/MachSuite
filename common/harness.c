@@ -61,7 +61,8 @@ int main(int argc, char **argv)
   // Validate benchmark results
   #ifdef CHECK_OUTPUT
   if( !check_data(data, ref) ) {
-    fprintf(stderr, "Benchmark results are incorrecT");
+    fprintf(stderr, "Benchmark results are incorrect\n");
+    return -1;
   }
   #endif
 
