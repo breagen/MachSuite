@@ -15,8 +15,6 @@ int main(int argc, char **argv) {
   int i, fd;
 
   // Fill data structure
-  //memset(&data.ctx, 0, sizeof(aes256_context));
-  srandom(1);
   for(i=0; i<32; i++)
     data.k[i] = i;
   memcpy(data.buf, initial_contents, 16);
@@ -26,4 +24,5 @@ int main(int argc, char **argv) {
   assert( fd>0 && "Couldn't open input data file" );
   data_to_input(fd, &data);
   
+  return 0;
 }

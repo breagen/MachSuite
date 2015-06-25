@@ -46,11 +46,17 @@ generate_test_TYPE_array(double)
 
 void test_section_jumping() {
   int fd;
-  char *p;
+  char *p, *s;
 
   fd = open("input_sections", O_RDONLY);
   assert(fd>1 && "Couldn't open file to read test input");
   p = readfile(fd);
+  s = find_section_start(p, 0);
+  assert(p==s && "Couldn't find zeroth section");
+  s = find_section_start(p, 1);
+  assert(p+3==s && "Couldn't find first section");
+  s = find_section_start(p, 2);
+  assert(p+3+5==s && "Couldn't find third section");
 }
 
 int main(int argc, char **argv)

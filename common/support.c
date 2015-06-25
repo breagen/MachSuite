@@ -1,5 +1,6 @@
 #include "support.h"
 #include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
 #include <unistd.h>
 #include <assert.h>
@@ -8,6 +9,27 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
+
+// In general, fd_printf is used for individual values.
+#define SUFFICIENT_SPRINTF_SPACE 256
+// It'd be nice if dprintf was c99. But it ain't.
+static inline int fd_printf(int fd, const char *format, ...) {
+  va_list args;
+  int buffered, written, status;
+  char buffer[SUFFICIENT_SPRINTF_SPACE];
+  va_start(args, format);
+  buffered = vsnprintf(buffer, SUFFICIENT_SPRINTF_SPACE, format, args);
+  va_end(args);
+  assert(buffered<SUFFICIENT_SPRINTF_SPACE && "Overran fd_printf buffer---output possibly corrupt");
+  written = 0;
+  while(written<buffered) {
+    status = write(fd, &buffer[written], buffered-written);
+    assert(status>=0 && "Write failed");
+    written += status;
+  }
+  assert(written==buffered && "Wrote more data than given");
+  return written;
+}
 
 ///// File and section functions
 char *readfile(int fd) {
@@ -27,6 +49,10 @@ char *readfile(int fd) {
 
 char *find_section_start(char *s, int n) {
   int i=0;
+
+  assert(n>=0 && "Invalid section number");
+  if(n==0)
+    return s;
 
   // Find the nth "%%\n" substring (if *s==0, there wasn't one)
   while(i<n && (*s)!=(char)0) {
@@ -50,7 +76,7 @@ int parse_##TYPE##_array(char *s, TYPE *arr, int n) { \
   \
   assert(s!=NULL && "Invalid input string"); \
   \
-  line = strsep(&s,"\n"); \
+  line = strtok(s,"\n"); \
   while( line!=NULL && i<n ) { \
     endptr = line; \
     errno=0; \
@@ -65,11 +91,11 @@ int parse_##TYPE##_array(char *s, TYPE *arr, int n) { \
     assert(errno==0 && "Couldn't convert the string"); \
     arr[i] = v; \
     i++; \
-    line[strlen(line)] = '\n'; /* Undo the strsep replacement.*/ \
-    line = strsep(&s,"\n"); \
+    line[strlen(line)] = '\n'; /* Undo the strtok replacement.*/ \
+    line = strtok(NULL,"\n"); \
   } \
   if(line!=NULL) { /* stopped because we read all the things */ \
-    line[strlen(line)] = '\n'; /* Undo the strsep replacement.*/ \
+    line[strlen(line)] = '\n'; /* Undo the strtok replacement.*/ \
   } \
   \
   return 0; \
@@ -95,7 +121,7 @@ int write_##TYPE##_array(int fd, TYPE *arr, int n) { \
   int i; \
   assert(fd>1 && "Invalid file descriptor"); \
   for( i=0; i<n; i++ ) { \
-    dprintf(fd, "%" FORMAT "\n", arr[i]); \
+    fd_printf(fd, "%" FORMAT "\n", arr[i]); \
   } \
   return 0; \
 }
@@ -114,6 +140,6 @@ generate_write_TYPE_array(double, "f")
 
 int write_section_header(int fd) {
   assert(fd>1 && "Invalid file descriptor");
-  dprintf(fd, "%%%%\n"); // Just prints %%
+  fd_printf(fd, "%%%%\n"); // Just prints %%
   return 0;
 }
