@@ -32,7 +32,7 @@ Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summar
 --------- | ---- | ------- | -------- | --- | ---------------- | ----------------- | ---------------------
 `aes/aes` |X|X|X|X|X|C|string compare
 `backprop/backprop` |X| | | | |+?|(more work needed)
-`bfs/bulk` |X| | | | |A|horizon counts
+`bfs/bulk` |X|X|X|X|X|A|horizon counts
 `bfs/queue` |X| | | | |A|horizon counts
 `fft/strided` |X| | | | |A+|compare array ±eps; new input (known signal from combination of frequencies); check freq spikes
 `fft/transpose` |X| | | | |A+|compare array ±eps; new input (known signal from combination of frequencies); check freq spikes
