@@ -1,8 +1,8 @@
 BENCHMARKS=\
 	aes/aes \
+	bfs/bulk \
 #FIXME\
 	backprop/backprop \
-	bfs/bulk \
 	bfs/queue \
 	fft/strided \
 	fft/transpose \
