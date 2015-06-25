@@ -6,9 +6,9 @@ V. Volkov and B. Kazian. Fitting fft onto the g80 architecture. 2008.
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "support.h"
 
 #define TYPE double
-//#define TYPE int
 
 typedef struct complex_t {
         TYPE x;
@@ -28,11 +28,3 @@ struct bench_args_t {
         TYPE work_x[512];
         TYPE work_y[512];
 };
-int INPUT_SIZE = sizeof(struct bench_args_t);
-
-void run_benchmark( void *vargs ) {
-  struct bench_args_t *args = (struct bench_args_t *)vargs;
-  fft1D_512( args->work_x, args->work_y);
-}
-
-////////////////////////////////////////////////////////////////////////////////
