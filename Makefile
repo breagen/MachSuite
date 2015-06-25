@@ -1,10 +1,10 @@
 BENCHMARKS=\
 	aes/aes \
 	bfs/bulk \
-#FIXME\
-	backprop/backprop \
 	bfs/queue \
 	fft/strided \
+#FIXME\
+	backprop/backprop \
 	fft/transpose \
 	gemm/ncubed \
 	gemm/blocked \

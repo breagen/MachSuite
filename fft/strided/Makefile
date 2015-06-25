@@ -13,7 +13,7 @@ run: $(KERN) input.data check.data
 	./$(KERN) input.data check.data
 
 generate: $(FILES) generate.c
-	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c
+	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c -lm
 
 hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
