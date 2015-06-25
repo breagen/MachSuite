@@ -3,7 +3,8 @@
 
 int INPUT_SIZE = sizeof(struct bench_args_t);
 
-#define EPSILON 1e-15
+// Relatively coarse, but FFT's output values are large.
+#define EPSILON 0.001
 
 // Macro trick to automatically expand TYPE into the appropriate function
 // (S)et (T)ype (A)nd (C)oncatenate
