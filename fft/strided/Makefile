@@ -7,7 +7,7 @@ SRCS=$(KERN).c support.c ../../common/support.c
 FILES=$(SRCS) $(KERN).h ../../common/support.h
 
 $(KERN): $(FILES) ../../common/harness.c
-	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c -lm
 
 run: $(KERN) input.data check.data
 	./$(KERN) input.data check.data

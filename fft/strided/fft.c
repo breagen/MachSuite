@@ -1,6 +1,6 @@
 #include "fft.h"
 
-void fft(double real[size], double img[size], double real_twid[size], double img_twid[size]){
+void fft(double real[size], double img[size], double real_twid[size/2], double img_twid[size/2]){
     int even, odd, span, log, rootindex;
     double temp;
     log = 0;

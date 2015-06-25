@@ -36,6 +36,7 @@ int main(int argc, char **argv)
   data = malloc(INPUT_SIZE);
   assert( data!=NULL && "Out of memory" );
   in_fd = open( in_file, O_RDONLY );
+  assert( in_fd>0 && "Couldn't open input data file");
   input_to_data(in_fd, data);
   
   // Unpack and call
@@ -56,6 +57,7 @@ int main(int argc, char **argv)
   ref = malloc(INPUT_SIZE);
   assert( ref!=NULL && "Out of memory" );
   check_fd = open( check_file, O_RDONLY );
+  assert( check_fd>0 && "Couldn't open check data file");
   output_to_data(check_fd, ref);
   #endif
 
