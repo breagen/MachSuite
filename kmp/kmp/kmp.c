@@ -36,7 +36,7 @@ void CPF(char pattern[PATTERN_SIZE], int kmpNext[PATTERN_SIZE]) {
     int k, q;
     k = 0;
     kmpNext[0] = 0;
-    
+
     c1 : for(q = 1; q < PATTERN_SIZE; q++){
         c2 : while(k > 0 && pattern[k] != pattern[q]){
             k = kmpNext[q];
@@ -50,7 +50,7 @@ void CPF(char pattern[PATTERN_SIZE], int kmpNext[PATTERN_SIZE]) {
 
 
 int kmp(char pattern[PATTERN_SIZE], char input[STRING_SIZE], int kmpNext[PATTERN_SIZE]) {
-    int i, q; 
+    int i, q;
     int outs;
     outs = 0;
 

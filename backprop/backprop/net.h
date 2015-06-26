@@ -29,8 +29,8 @@
 
 static const int layer_size[] = {SIZE_IN, MAX_COLS, SIZE_OUT};
 
-void backprop(TYPE weights[NUM_LAYERS - 1][MAX_ROWS][MAX_COLS], 
-        TYPE inputs[NUM_TRAIN][SIZE_IN], 
+void backprop(TYPE weights[NUM_LAYERS - 1][MAX_ROWS][MAX_COLS],
+        TYPE inputs[NUM_TRAIN][SIZE_IN],
         TYPE targets[NUM_TRAIN][SIZE_OUT]);
 
 ////////////////////////////////////////////////////////////////////////////////

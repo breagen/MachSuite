@@ -88,7 +88,7 @@ void generate_binary()
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( fd>0 && "Couldn't open input data file" );
-  
+
   ptr = (char *) &data;
   while( written<sizeof(data) ) {
     status = write( fd, ptr, sizeof(data)-written );
@@ -140,7 +140,7 @@ void generate_binary()
 
   // Sort by row
   qsort(coords, NNZ, 2*sizeof(int), &compar);
-  
+
   // Fill data structure
   memset(row_fill, 0, N*sizeof(int)); // fill helper array
   memset(data.cols, 0, N*L*sizeof(int)); // value doesn't really matter
@@ -159,7 +159,7 @@ void generate_binary()
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( fd>0 && "Couldn't open input data file" );
-  
+
   ptr = (char *) &data;
   while( written<sizeof(data) ) {
     status = write( fd, ptr, sizeof(data)-written );

@@ -30,8 +30,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "gemm.h"
 
-void gemm( TYPE m1[row_size * col_size], 
-           TYPE m2[row_size * col_size], 
+void gemm( TYPE m1[row_size * col_size],
+           TYPE m2[row_size * col_size],
            TYPE prod[row_size * col_size]){
 
     int i, j, k;
