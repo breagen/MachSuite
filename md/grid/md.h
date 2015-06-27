@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //#define blockSide     1
 #define nBlocks       (blockSide*blockSide*blockSide)
 #define blockEdge     (domainEdge/((double)blockSide))
-// Memory Bound 
+// Memory Bound
 // This is an artifact of using statically-allocated arrays. We'll pretend that
 // it doesn't exist and instead track the actual number of points.
 #define densityFactor 10

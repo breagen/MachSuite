@@ -42,7 +42,7 @@ void generate_binary()
   // Generate dense R-MAT matrix
   memset(adjmat, 0, N_NODES*N_NODES*sizeof(node_index_t));
   srandom(1);
-  
+
   e = 0;
   while( e<N_EDGES/2 ) { // generate N_EDGES/2 undirected edges (N_EDGES directed)
     r = 0;
@@ -117,7 +117,7 @@ void generate_binary()
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( fd>0 && "Couldn't open input data file" );
-  
+
   ptr = (char *) &data;
   while( written<sizeof(data) ) {
     status = write( fd, ptr, sizeof(data)-written );

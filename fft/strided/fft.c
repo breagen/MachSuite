@@ -20,7 +20,7 @@ void fft(double real[size], double img[size], double real_twid[size], double img
 
             rootindex = (even<<log) & (size - 1);
             if(rootindex){
-                temp = real_twid[rootindex] * real[odd] - 
+                temp = real_twid[rootindex] * real[odd] -
                     img_twid[rootindex]  * img[odd];
                 img[odd] = real_twid[rootindex]*img[odd] +
                     img_twid[rootindex]*real[odd];

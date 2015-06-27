@@ -1,6 +1,6 @@
-/*  
+/*
 *   Byte-oriented AES-256 implementation.
-*   All lookup tables replaced with 'on the fly' calculations. 
+*   All lookup tables replaced with 'on the fly' calculations.
 *
 *   Copyright (c) 2007-2009 Ilya O. Levin, http://www.literatecode.com
 *   Other contributors: Hal Finney
@@ -101,7 +101,7 @@ uint8_t rj_sbox(uint8_t x)
     uint8_t y, sb;
 
     sb = y = gf_mulinv(x);
-    y = (y<<1)|(y>>7); sb ^= y;  y = (y<<1)|(y>>7); sb ^= y; 
+    y = (y<<1)|(y>>7); sb ^= y;  y = (y<<1)|(y>>7); sb ^= y;
     y = (y<<1)|(y>>7); sb ^= y;  y = (y<<1)|(y>>7); sb ^= y;
 
     return (sb ^ 0x63);
@@ -109,7 +109,7 @@ uint8_t rj_sbox(uint8_t x)
 #endif
 
 /* -------------------------------------------------------------------------- */
-uint8_t rj_xtime(uint8_t x) 
+uint8_t rj_xtime(uint8_t x)
 {
     return (x & 0x80) ? ((x << 1) ^ 0x1b) : (x << 1);
 } /* rj_xtime */
@@ -166,7 +166,7 @@ void aes_mixColumns(uint8_t *buf)
 } /* aes_mixColumns */
 
 /* -------------------------------------------------------------------------- */
-void aes_expandEncKey(uint8_t *k, uint8_t *rc) 
+void aes_expandEncKey(uint8_t *k, uint8_t *rc)
 {
     register uint8_t i;
 
@@ -214,7 +214,7 @@ void aes256_encrypt_ecb(aes256_context *ctx, uint8_t k[32], uint8_t buf[16])
     }
     aes_subBytes(buf);
     aes_shiftRows(buf);
-    aes_expandEncKey(ctx->key, &rcon); 
+    aes_expandEncKey(ctx->key, &rcon);
     aes_addRoundKey(buf, ctx->key);
 } /* aes256_encrypt */
 
