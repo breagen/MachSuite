@@ -69,7 +69,7 @@ int check_data( void *vdata, void *vref ) {
   struct bench_args_t *ref = (struct bench_args_t *)vref;
   int has_errors = 0;
 
-  has_errors |= (data->n_matches != ref->n_matches);
+  has_errors |= (data->n_matches[0] != ref->n_matches[0]);
 
   // Return true if it's correct.
   return !has_errors;

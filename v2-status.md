@@ -34,8 +34,8 @@ Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summar
 `backprop/backprop` |X| | | | |+?|(more work needed)
 `bfs/bulk` |X|X|X|X|X|A|horizon counts
 `bfs/queue` |X|X|X|X|X|A|horizon counts
-`fft/strided` |X|X|X|X|X|A+|compare array ±eps; new input (known signal from combination of frequencies); check freq spikes
-`fft/transpose` |X|X|X|X|X|A+|compare array ±eps; new input (known signal from combination of frequencies); check freq spikes
+`fft/strided` |X|X|X|X|X|A|compare array ±eps
+`fft/transpose` |X|X|X|X|X|A|compare array ±eps
 `gemm/ncubed` |X|X|X|X|X|A+|compare matrix ±eps; change data type to float
 `gemm/blocked` |X|X|X|X|X|A+|compare matrix ±eps; change data type to float
 `kmp/kmp` |X|X|X|X|X|1|match count
