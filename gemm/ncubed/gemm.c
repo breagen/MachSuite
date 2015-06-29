@@ -1,17 +1,11 @@
 #include "gemm.h"
 
-void gemm( TYPE m1[row_size * col_size],
-           TYPE m2[row_size * col_size],
-           TYPE prod[row_size * col_size]){
-
+void gemm( TYPE m1[N], TYPE m2[N], TYPE prod[N] ){
     int i, j, k;
-    TYPE mult, k_col, i_col;
+    int k_col, i_col;
+    TYPE mult;
 
-    mult = 0;
-    k_col = 0;
-    i_col = 0;
-
-    outter:for(i=0;i<row_size;i++) {
+    outer:for(i=0;i<row_size;i++) {
         middle:for(j=0;j<col_size;j++) {
             i_col = i * col_size;
             TYPE sum = 0;
