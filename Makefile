@@ -6,9 +6,9 @@ BENCHMARKS=\
 	fft/transpose \
 	gemm/ncubed \
 	gemm/blocked \
+	kmp/kmp \
 #FIXME\
 	backprop/backprop \
-	kmp/kmp \
 	md/knn \
 	md/grid \
 	nw/nw \

@@ -38,7 +38,7 @@ Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summar
 `fft/transpose` |X|X|X|X|X|A+|compare array ±eps; new input (known signal from combination of frequencies); check freq spikes
 `gemm/ncubed` |X|X|X|X|X|A+|compare matrix ±eps; change data type to float
 `gemm/blocked` |X|X|X|X|X|A+|compare matrix ±eps; change data type to float
-`kmp/kmp` |X| | | | |1|match count
+`kmp/kmp` |X|X|X|X|X|1|match count
 `md/knn` |X| | | | |A|compare positions ±eps
 `md/grid` |X| | | | |A|compare positions ±eps
 `nw/nw` |X| | | | |C|Compare aligned sequences
