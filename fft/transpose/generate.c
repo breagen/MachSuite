@@ -15,10 +15,10 @@ int main(int argc, char **argv)
   int i, fd;
 
   // Fill data structure
-  srandom(1);
+  srand(1);
   for(i=0; i<512; i++){
-    data.work_x[i] = (double)random();
-    data.work_y[i] = (double)random();
+    data.work_x[i] = ((TYPE)rand())/((TYPE)RAND_MAX);
+    data.work_y[i] = ((TYPE)rand())/((TYPE)RAND_MAX);
   }
 
   // Open and write

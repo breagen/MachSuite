@@ -8,9 +8,9 @@ ASPLOS 1991
 #include "gemm.h"
 
 void bbgemm(TYPE m1[N], TYPE m2[N], TYPE prod[N]){
-    int i, k, j, jj, kk, temp_x;
+    int i, k, j, jj, kk;
     int i_row, k_row;
-    TYPE mul;
+    TYPE temp_x, mul;
 
     loopjj:for (jj = 0; jj < row_size; jj += block_size){
         loopkk:for (kk = 0; kk < row_size; kk += block_size){

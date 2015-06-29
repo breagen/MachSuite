@@ -6,11 +6,6 @@ int INPUT_SIZE = sizeof(struct bench_args_t);
 // Relatively coarse, but FFT's output values are large.
 #define EPSILON 0.001
 
-// Macro trick to automatically expand TYPE into the appropriate function
-// (S)et (T)ype (A)nd (C)oncatenate
-#define STAC(f_pfx,t,f_sfx) STAC_EXPANDED(f_pfx,t,f_sfx)
-#define STAC_EXPANDED(f_pfx,t,f_sfx) f_pfx##t##f_sfx
-
 void run_benchmark( void *vargs ) {
   struct bench_args_t *args = (struct bench_args_t *)vargs;
   fft1D_512( args->work_x, args->work_y);

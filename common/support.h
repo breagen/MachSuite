@@ -40,3 +40,15 @@ void data_to_output(int fd, void *vdata);
 int check_data(void *vdata, void *vref);
 
 extern int INPUT_SIZE;
+
+///// TYPE macros
+// Macro trick to automatically expand TYPE into the appropriate function
+// (S)et (T)ype (A)nd (C)oncatenate
+#define __STAC_EXPANDED(f_pfx,t,f_sfx) f_pfx##t##f_sfx
+#define STAC(f_pfx,t,f_sfx) __STAC_EXPANDED(f_pfx,t,f_sfx)
+// Invoke like this:
+//   #define TYPE int32_t
+//   STAC(write_,TYPE,_array)(fd, array, n);
+// where array is of type (TYPE *)
+// This translates to:
+//   write_int32_t_array(fd, array, n);

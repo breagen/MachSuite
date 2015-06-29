@@ -7,9 +7,10 @@ ASPLOS 1991
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "support.h"
 
 //Data Type
-#define TYPE int
+#define TYPE double
 
 //Algorithm Parameters
 #define row_size 64
@@ -19,8 +20,8 @@ ASPLOS 1991
 #define NUMOFBLOCKS N/block_size/block_size
 
 //Define the input range to operate over
-#define MIN 2147483646
-#define MAX -2147483646
+#define MIN 0.
+#define MAX 1.0
 
 //Set number of iterations to execute
 #define MAX_ITERATION 1
@@ -34,12 +35,3 @@ struct bench_args_t {
   TYPE m2[N];
   TYPE prod[N];
 };
-int INPUT_SIZE = sizeof(struct bench_args_t);
-
-
-void run_benchmark( void *vargs ) {
-  struct bench_args_t *args = (struct bench_args_t *)vargs;
-  bbgemm( args->m1, args->m2, args->prod );
-}
-
-////////////////////////////////////////////////////////////////////////////////
