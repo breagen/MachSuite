@@ -4,10 +4,10 @@ BENCHMARKS=\
 	bfs/queue \
 	fft/strided \
 	fft/transpose \
-#FIXME\
-	backprop/backprop \
 	gemm/ncubed \
 	gemm/blocked \
+#FIXME\
+	backprop/backprop \
 	kmp/kmp \
 	md/knn \
 	md/grid \
