@@ -68,6 +68,27 @@ char *find_section_start(char *s, int n) {
 }
 
 ///// Array read functions
+int parse_string(char *s, char *arr, int n) {
+  int k;
+  assert(s!=NULL && "Invalid input string");
+
+  if( n<0 ) { // terminated string
+    k = 0;
+    while( s[k]!=(char)0 && s[k+1]!=(char)0 && s[k+2]!=(char)0
+        && !(s[k]=='\n'  && s[k+1]=='%'     && s[k+2]=='%') ) {
+      k++;
+    }
+  } else { // fixed-length string
+    k = n;
+  }
+
+  memcpy( arr, s, k );
+  if( n<0 )
+    arr[k] = 0;
+
+  return 0;
+}
+
 #define generate_parse_TYPE_array(TYPE, STRTOTYPE) \
 int parse_##TYPE##_array(char *s, TYPE *arr, int n) { \
   char *line, *endptr; \
@@ -115,6 +136,27 @@ generate_parse_TYPE_array(float, strtof)
 generate_parse_TYPE_array(double, strtod)
 
 ///// Array write functions
+int write_string(int fd, char *arr, int n) {
+  int status, written;
+  assert(fd>1 && "Invalid file descriptor");
+  if( n<0 ) { // NULL-terminated string
+    n = strlen(arr);
+  }
+  written = 0;
+  while(written<n) {
+    status = write(fd, &arr[written], n-written);
+    assert(status>=0 && "Write failed");
+    written += status;
+  }
+  // Write terminating '\n'
+  do {
+    status = write(fd, "\n", 1);
+    assert(status>=0 && "Write failed");
+  } while(status==0);
+
+  return 0;
+}
+
 // Not strictly necessary, but nice for future-proofing.
 #define generate_write_TYPE_array(TYPE, FORMAT) \
 int write_##TYPE##_array(int fd, TYPE *arr, int n) { \

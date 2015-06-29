@@ -6,6 +6,8 @@ char *readfile(int fd);
 char *find_section_start(char *s, int n);
 
 ///// Array read functions
+#define SECTION_TERMINATED -1
+int parse_string(char *s, char *arr, int n); // n==-1 : %%-terminated
 int parse_uint8_t_array(char *s, uint8_t *arr, int n);
 int parse_uint16_t_array(char *s, uint16_t *arr, int n);
 int parse_uint32_t_array(char *s, uint32_t *arr, int n);
@@ -18,6 +20,7 @@ int parse_float_array(char *s, float *arr, int n);
 int parse_double_array(char *s, double *arr, int n);
 
 ///// Array write functions
+int write_string(int fd, char *arr, int n);
 int write_uint8_t_array(int fd, uint8_t *arr, int n);
 int write_uint16_t_array(int fd, uint16_t *arr, int n);
 int write_uint32_t_array(int fd, uint32_t *arr, int n);
