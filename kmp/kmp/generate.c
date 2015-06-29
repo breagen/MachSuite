@@ -31,4 +31,6 @@ int main(int argc, char **argv)
   assert( fd>0 && "Couldn't open input data file" );
 
   data_to_input(fd, (void *)(&data));
+
+  return 0;
 }
