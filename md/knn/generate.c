@@ -88,4 +88,6 @@ int main(int argc, char **argv)
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( fd>0 && "Couldn't open input data file" );
   data_to_input(fd, (void *)(&data));
+
+  return 0;
 }
