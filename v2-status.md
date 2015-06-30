@@ -41,7 +41,7 @@ Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summar
 `kmp/kmp` |X|X|X|X|X|1|match count
 `md/knn` |X|X|X|X|X|A|compare positions ±eps
 `md/grid` |X|X|X|X|X|A|compare positions ±eps
-`nw/nw` |X| | | | |C|Compare aligned sequences
+`nw/nw` |X|X| |X| |C|Compare aligned sequences
 `sort/merge` |X| | | | |1+|Check sortedness and sum
 `sort/radix` |X| | | | |1+|Check sortedness and sum
 `spmv/crs` |X| | | | |A|Compare vector ±eps
