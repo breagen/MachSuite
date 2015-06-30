@@ -11,11 +11,11 @@ BENCHMARKS=\
 	md/grid \
 	sort/merge \
 	sort/radix \
+	spmv/crs \
+	spmv/ellpack \
 #FIXME\
 	backprop/backprop \
 	nw/nw \
-	spmv/crs \
-	spmv/ellpack \
 	stencil/stencil2d \
 	stencil/stencil3d \
 	viterbi/viterbi

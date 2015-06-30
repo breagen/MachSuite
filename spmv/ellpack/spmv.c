@@ -5,7 +5,7 @@ http://www.cs.berkeley.edu/~mhoemmen/matrix-seminar/slides/UCB_sparse_tutorial_1
 
 #include "spmv.h"
 
-void ellpack(TYPE nzval[N*L], int cols[N*L], TYPE vec[N], TYPE out[N])
+void ellpack(TYPE nzval[N*L], int32_t cols[N*L], TYPE vec[N], TYPE out[N])
 {
     int i, j;
     TYPE Si;

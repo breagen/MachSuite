@@ -8,11 +8,9 @@
 #include <assert.h>
 
 #define FROM_FILE
-//#define FROM_RANDOM
+//#define FROM_RANDOM FIXME
 
 #include "spmv.h"
-// Fake benchmark function to satisfy the extern
-void ellpack(TYPE nzval[N*L], int cols[N*L], TYPE vec[N], TYPE out[N]) { }
 
 #define ROW 0
 #define COL 1
@@ -40,7 +38,8 @@ int compar(const void *v_lhs, const void *v_rhs)
 }
 
 #ifdef FROM_RANDOM
-// FIXME: not updated from CRS, need to rewrite for ellpack
+// FIXME: copied from CRS, need to rewrite for ellpack
+// FIXME: need to update to new I/O and check format, too (RDA:6/30/15)
 void generate_binary()
 {
   struct bench_args_t data;
@@ -99,12 +98,12 @@ void generate_binary()
 #endif
 
 #ifdef FROM_FILE
-void generate_binary()
+int main(int argc, char **argv)
 {
   struct bench_args_t data;
   struct stat file_info;
-  char *ptr, *current, *next, *buffer;
-  int status, i, fd, nbytes, written=0;
+  char *current, *next, *buffer;
+  int status, i, fd, nbytes;
   int coords[NNZ][2]; // row, col
   TYPE vals[NNZ];
   int row_fill[N];
@@ -152,30 +151,17 @@ void generate_binary()
     data.cols[index] = coords[i][COL]-1; // matrix is 1-indexed
     ++row_fill[row];
   }
+
+  // Set vector
+  srand(2);
   for(i=0; i<N; i++)
-    data.vec[i] = 1;
-  memset(data.out, 0, N*sizeof(TYPE));
+    data.vec[i] = ((double)rand())/((double)RAND_MAX);
 
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( fd>0 && "Couldn't open input data file" );
+  data_to_input(fd, (void *)(&data));
 
-  ptr = (char *) &data;
-  while( written<sizeof(data) ) {
-    status = write( fd, ptr, sizeof(data)-written );
-    assert( status>=0 && "Couldn't write input data file" );
-    written += status;
-  }
-}
-#endif
-
-int main(int argc, char **argv)
-{
-#ifdef FROM_RANDOM
-  generate_binary();
-#endif
-#ifdef FROM_FILE
-  generate_binary();
-#endif
   return 0;
 }
+#endif
