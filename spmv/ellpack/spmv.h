@@ -14,9 +14,6 @@ http://www.cs.berkeley.edu/~mhoemmen/matrix-seminar/slides/UCB_sparse_tutorial_1
 
 #define TYPE double
 
-#define MIN 2147483646
-#define MAX -2147483646
-
 void ellpack(TYPE nzval[N*L], int32_t cols[N*L], TYPE vec[N], TYPE out[N]);
 ////////////////////////////////////////////////////////////////////////////////
 // Test harness interface code.

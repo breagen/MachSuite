@@ -13,10 +13,10 @@ BENCHMARKS=\
 	sort/radix \
 	spmv/crs \
 	spmv/ellpack \
+	stencil/stencil2d \
 #FIXME\
 	backprop/backprop \
 	nw/nw \
-	stencil/stencil2d \
 	stencil/stencil3d \
 	viterbi/viterbi
 
