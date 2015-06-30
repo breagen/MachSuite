@@ -1,11 +1,11 @@
 #set_directive_allocation -limit 26858 -type operation md add
 #set_directive_allocation -limit 11150 -type operation md mul
 
-#set_directive_resource -core RAM_1P_BRAM "md" d_force
+#set_directive_resource -core RAM_1P_BRAM "md" force
 #set_directive_resource -core RAM_1P_BRAM "md" position
 set_directive_resource -core RAM_1P_BRAM "md" n_points
 
-#set_directive_array_partition -factor 64 -type cyclic md d_force
+#set_directive_array_partition -factor 64 -type cyclic md force
 #set_directive_array_partition -factor 64 -type cyclic md position
 #set_directive_array_partition -factor 64 -type cyclic md n_points
 

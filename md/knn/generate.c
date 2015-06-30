@@ -60,7 +60,7 @@ int main(int argc, char **argv)
       data.position_x[i] = x;
       data.position_y[i] = y;
       data.position_z[i] = z;
-      printf("%lf %lf %lf\n", data.position_x[i], data.position_y[i], data.position_z[i] );
+      //printf("%lf %lf %lf\n", data.position_x[i], data.position_y[i], data.position_z[i] );
       ++i;
     }
   }

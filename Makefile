@@ -8,9 +8,9 @@ BENCHMARKS=\
 	gemm/blocked \
 	kmp/kmp \
 	md/knn \
+	md/grid \
 #FIXME\
 	backprop/backprop \
-	md/grid \
 	nw/nw \
 	sort/merge \
 	sort/radix \

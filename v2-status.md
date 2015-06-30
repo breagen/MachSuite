@@ -40,7 +40,7 @@ Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summar
 `gemm/blocked` |X|X|X|X|X|A+|compare matrix ±eps; change data type to float
 `kmp/kmp` |X|X|X|X|X|1|match count
 `md/knn` |X|X|X|X|X|A|compare positions ±eps
-`md/grid` |X| | | | |A|compare positions ±eps
+`md/grid` |X|X|X|X|X|A|compare positions ±eps
 `nw/nw` |X| | | | |C|Compare aligned sequences
 `sort/merge` |X| | | | |1+|Check sortedness and sum
 `sort/radix` |X| | | | |1+|Check sortedness and sum
