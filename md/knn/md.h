@@ -7,6 +7,7 @@ In Proceedings of the 3rd Workshop on General-Purpose Computation on Graphics Pr
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "support.h"
 
 #define TYPE double
 
@@ -17,33 +18,22 @@ In Proceedings of the 3rd Workshop on General-Purpose Computation on Graphics Pr
 #define lj1           1.5
 #define lj2           2.0
 
+void md_kernel(TYPE force_x[nAtoms],
+               TYPE force_y[nAtoms],
+               TYPE force_z[nAtoms],
+               TYPE position_x[nAtoms],
+               TYPE position_y[nAtoms],
+               TYPE position_z[nAtoms],
+               int32_t NL[nAtoms*maxNeighbors]);
 ////////////////////////////////////////////////////////////////////////////////
 // Test harness interface code.
 
 struct bench_args_t {
-  TYPE d_force_x[nAtoms];
-  TYPE d_force_y[nAtoms];
-  TYPE d_force_z[nAtoms];
+  TYPE force_x[nAtoms];
+  TYPE force_y[nAtoms];
+  TYPE force_z[nAtoms];
   TYPE position_x[nAtoms];
   TYPE position_y[nAtoms];
   TYPE position_z[nAtoms];
-  TYPE NL[nAtoms*maxNeighbors];
+  int32_t NL[nAtoms*maxNeighbors];
 };
-int INPUT_SIZE = sizeof(struct bench_args_t);
-
-void md_kernel(TYPE d_force_x[nAtoms],
-               TYPE d_force_y[nAtoms],
-               TYPE d_force_z[nAtoms],
-               TYPE position_x[nAtoms],
-               TYPE position_y[nAtoms],
-               TYPE position_z[nAtoms],
-               TYPE NL[nAtoms*maxNeighbors]);
-
-void run_benchmark( void *vargs ) {
-  struct bench_args_t *args = (struct bench_args_t *)vargs;
-  md_kernel( args->d_force_x, args->d_force_y, args->d_force_z,
-             args->position_x, args->position_y, args->position_z,
-             args->NL );
-}
-
-////////////////////////////////////////////////////////////////////////////////

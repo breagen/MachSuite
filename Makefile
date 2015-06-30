@@ -7,9 +7,9 @@ BENCHMARKS=\
 	gemm/ncubed \
 	gemm/blocked \
 	kmp/kmp \
+	md/knn \
 #FIXME\
 	backprop/backprop \
-	md/knn \
 	md/grid \
 	nw/nw \
 	sort/merge \

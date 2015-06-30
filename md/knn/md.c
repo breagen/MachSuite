@@ -7,19 +7,19 @@ In Proceedings of the 3rd Workshop on General-Purpose Computation on Graphics Pr
 
 #include "md.h"
 
-void md_kernel(TYPE d_force_x[nAtoms],
-               TYPE d_force_y[nAtoms],
-               TYPE d_force_z[nAtoms],
+void md_kernel(TYPE force_x[nAtoms],
+               TYPE force_y[nAtoms],
+               TYPE force_z[nAtoms],
                TYPE position_x[nAtoms],
                TYPE position_y[nAtoms],
                TYPE position_z[nAtoms],
-               TYPE NL[nAtoms*maxNeighbors])
+               int32_t NL[nAtoms*maxNeighbors])
 {
     TYPE delx, dely, delz, r2inv;
     TYPE r6inv, potential, force, j_x, j_y, j_z;
     TYPE i_x, i_y, i_z, fx, fy, fz;
 
-    int i, j, jidx;
+    int32_t i, j, jidx;
 
 loop_i : for (i = 0; i < nAtoms; i++){
              i_x = position_x[i];
@@ -50,9 +50,9 @@ loop_j : for( j = 0; j < maxNeighbors; j++){
              fz += delz * force;
          }
          //Update forces after all neighbors accounted for.
-         d_force_x[i] = fx;
-         d_force_y[i] = fy;
-         d_force_z[i] = fz;
+         force_x[i] = fx;
+         force_y[i] = fy;
+         force_z[i] = fz;
          //printf("dF=%lf,%lf,%lf\n", fx, fy, fz);
          }
 }
