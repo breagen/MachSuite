@@ -14,10 +14,10 @@ BENCHMARKS=\
 	spmv/crs \
 	spmv/ellpack \
 	stencil/stencil2d \
+	stencil/stencil3d \
 #FIXME\
 	backprop/backprop \
 	nw/nw \
-	stencil/stencil3d \
 	viterbi/viterbi
 
 CFLAGS=-O3 -Wall -Wno-unused-label

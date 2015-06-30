@@ -46,8 +46,8 @@ Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summar
 `sort/radix` |X|X|X|X|X|1+|Check sortedness and sum
 `spmv/crs` |X|X|X|X|X|A|Compare vector ±eps
 `spmv/ellpack` |X|X|X|X|X|A|Compare vector ±eps
-`stencil/stencil2d` |X| | | | |A|Compare matrix
-`stencil/stencil3d` |X| | | | |A|Compare matrix
+`stencil/stencil2d` |X|X|X|X|X|A|Compare matrix
+`stencil/stencil3d` |X|X|X|X|X|A|Compare matrix
 `viterbi/viterbi` |X| | | | |+?|(more work needed)
 
 ## Large Inputs

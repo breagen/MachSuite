@@ -7,27 +7,23 @@ SC 2008
 
 #include "stencil.h"
 
-void stencil3d(TYPE C0, TYPE C1, TYPE orig[size], TYPE sol[size]) {
+void stencil3d(TYPE C[2], TYPE orig[SIZE], TYPE sol[SIZE]) {
     int i, j, k;
-    TYPE sum1, sum2, mul1, mul2, diff;
+    TYPE sum0, sum1, mul0, mul1;
 
     loop_height : for(i = 1; i < height_size - 1; i++){
         loop_col : for(j = 1; j < col_size - 1; j++){
             loop_row : for(k = 1; k < row_size - 1; k++){
-                sum1 = orig[indx(row_size, col_size, i, j, k + 1)] +
-                       orig[indx (row_size, col_size, i, j, k - 1)] +
-                       orig[indx (row_size, col_size, i, j + 1, k)] +
-                       orig[indx (row_size, col_size, i, j - 1, k)] +
-                       orig[indx (row_size, col_size, i + 1, j, k)] +
-                       orig[indx (row_size, col_size, i - 1, j, k)];
-
-                sum2 = orig[indx (row_size, col_size, i, j, k)];
-
-                mul2 = sum2 * C0;
-                mul1 = sum1 * C1;
-                diff = mul1 - mul2;
-
-                sol[indx(row_size, col_size, i, j, k)] = diff;
+                sum0 = orig[INDX(row_size, col_size, i, j, k)];
+                sum1 = orig[INDX(row_size, col_size, i, j, k + 1)] +
+                       orig[INDX(row_size, col_size, i, j, k - 1)] +
+                       orig[INDX(row_size, col_size, i, j + 1, k)] +
+                       orig[INDX(row_size, col_size, i, j - 1, k)] +
+                       orig[INDX(row_size, col_size, i + 1, j, k)] +
+                       orig[INDX(row_size, col_size, i - 1, j, k)];
+                mul0 = sum0 * C[0];
+                mul1 = sum1 * C[1];
+                sol[INDX(row_size, col_size, i, j, k)] = mul0 + mul1;
             }
         }
     }
