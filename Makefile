@@ -9,11 +9,11 @@ BENCHMARKS=\
 	kmp/kmp \
 	md/knn \
 	md/grid \
+	sort/merge \
+	sort/radix \
 #FIXME\
 	backprop/backprop \
 	nw/nw \
-	sort/merge \
-	sort/radix \
 	spmv/crs \
 	spmv/ellpack \
 	stencil/stencil2d \

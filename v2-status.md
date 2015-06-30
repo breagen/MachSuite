@@ -42,8 +42,8 @@ Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summar
 `md/knn` |X|X|X|X|X|A|compare positions ±eps
 `md/grid` |X|X|X|X|X|A|compare positions ±eps
 `nw/nw` |X|X| |X| |C|Compare aligned sequences
-`sort/merge` |X| | | | |1+|Check sortedness and sum
-`sort/radix` |X| | | | |1+|Check sortedness and sum
+`sort/merge` |X|X|X|X|X|1+|Check sortedness and sum
+`sort/radix` |X|X|X|X|X|1+|Check sortedness and sum
 `spmv/crs` |X| | | | |A|Compare vector ±eps
 `spmv/ellpack` |X| | | | |A|Compare vector ±eps
 `stencil/stencil2d` |X| | | | |A|Compare matrix

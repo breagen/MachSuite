@@ -1,22 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "support.h"
 
-#define size 4096
+#define SIZE 2048
+#define TYPE int32_t
 
-void ms_mergesort(int a[size]);
+void ms_mergesort(TYPE a[SIZE]);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Test harness interface code.
 
 struct bench_args_t {
-        int a[size];
+  TYPE a[SIZE];
 };
-int INPUT_SIZE = sizeof(struct bench_args_t);
-
-void run_benchmark( void *vargs ) {
-  struct bench_args_t *args = (struct bench_args_t *)vargs;
-  ms_mergesort( args->a);
-}
-
-////////////////////////////////////////////////////////////////////////////////
