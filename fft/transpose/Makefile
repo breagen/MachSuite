@@ -19,5 +19,4 @@ hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f $(KERN)
-	rm -f generate
+	rm -f $(KERN) generate output.data

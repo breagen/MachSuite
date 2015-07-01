@@ -109,5 +109,6 @@ int main(int argc, char **argv)
   test_double_array();
   test_strings();
 
+  printf("Success.\n");
   return 0;
 }

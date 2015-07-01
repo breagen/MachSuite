@@ -31,5 +31,14 @@ run:
 generate:
 	@( for b in $(BENCHMARKS); do $(MAKE) CFLAGS="$(CFLAGS)" -C $$b generate || exit ; done )
 
+
+### For regression tests
+all: clean build generate run
+
+test:
+	$(MAKE) -C common/test
+	$(MAKE) all CFLAGS="-O3 -Wall -Wno-unused-label -Werror"
+	$(MAKE) all CFLAGS="-O3 -Wall -Wno-unused-label -Werror -std=c99"
+
 clean:
 	@( for b in $(BENCHMARKS); do $(MAKE) -C $$b clean || exit ; done )
