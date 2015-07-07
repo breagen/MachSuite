@@ -102,7 +102,6 @@ static inline uint64_t prng_rand(struct prng_rand_t *state) {
 
 static inline void prng_srand(uint64_t seed, struct prng_rand_t *state) {
   uint_fast16_t i;
-  uint64_t rn;
   // Naive seed
   state->c = RAND_EXHAUST_LIMIT;
 
@@ -115,7 +114,7 @@ static inline void prng_srand(uint64_t seed, struct prng_rand_t *state) {
 
   // Run forward 10,000 numbers
   for(i=0; i<10000; i++) {
-    rn = prng_rand(state);
+    prng_rand(state);
   }
 }
 
