@@ -34,10 +34,11 @@ int main(int argc, char **argv)
   edge_index_t e;
   int scale;
   long int rint;
+  struct prng_rand_t state;
 
   // Generate dense R-MAT matrix
   memset(adjmat, 0, N_NODES*N_NODES*sizeof(node_index_t));
-  srandom(1);
+  prng_srand(1, &state);
 
   e = 0;
   while( e<N_EDGES/2 ) { // generate N_EDGES/2 undirected edges (N_EDGES directed)
@@ -45,7 +46,7 @@ int main(int argc, char **argv)
     c = 0;
     // Pick a random edge according to R-MAT parameters
     for( scale=SCALE; scale>0; scale-- ) { // each level of the quadtree
-      rint = random()%100;
+      rint = prng_rand(&state)%100;
       if( rint>=(A+B) ) // C or D (bottom half)
         r += 1<<(scale-1);
       if( (rint>=A && rint<A+B) || (rint>=A+B+C) ) // B or D (right half)
@@ -61,7 +62,7 @@ int main(int argc, char **argv)
 
   // Shuffle matrix (to eliminate degree locality)
   for( s=0; s<N_NODES; s++ ) {
-    rint = random()%N_NODES;
+    rint = prng_rand(&state)%N_NODES;
     // Swap row s with row rint
     for( r=0; r<N_NODES; r++ ) {
       for( c=0; c<N_NODES; c++ ) {
@@ -89,7 +90,7 @@ int main(int argc, char **argv)
       if( adjmat[r][c] ) {
         ++data.nodes[r].edge_end;
         data.edges[e].dst = c;
-        //data.edges[e].weight = random()%(MAX_WEIGHT-MIN_WEIGHT)+MIN_WEIGHT;
+        //data.edges[e].weight = prng_rand(&state)%(MAX_WEIGHT-MIN_WEIGHT)+MIN_WEIGHT;
         ++e;
       }
     }
@@ -102,7 +103,7 @@ int main(int argc, char **argv)
 
   // Pick starting node
   do {
-    rint = random()%N_NODES;
+    rint = prng_rand(&state)%N_NODES;
   } while( (data.nodes[rint].edge_end-data.nodes[rint].edge_begin)<2 );
   data.starting_node = rint;
 

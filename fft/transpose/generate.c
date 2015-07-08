@@ -13,18 +13,19 @@ int main(int argc, char **argv)
 {
   struct bench_args_t data;
   int i, fd;
+  struct prng_rand_t state;
 
   // Fill data structure
-  srand(1);
+  prng_srand(1,&state);
   for(i=0; i<512; i++){
-    data.work_x[i] = ((TYPE)rand())/((TYPE)RAND_MAX);
-    data.work_y[i] = ((TYPE)rand())/((TYPE)RAND_MAX);
+    data.work_x[i] = ((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX);
+    data.work_y[i] = ((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX);
   }
 
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( fd>0 && "Couldn't open input data file" );
-  data_to_output(fd, (void *)(&data));
+  data_to_input(fd, (void *)(&data));
 
   return 0;
 }

@@ -15,12 +15,13 @@ int main(int argc, char **argv)
   struct bench_args_t data;
   int i, n, fd;
   double typed;
+  struct prng_rand_t state;
 
   // Fill data structure
-  srandom(1);
+  prng_srand(1, &state);
   for(i=0; i<size; i++){
-    data.real[i] = random();
-    data.img[i] = random();
+    data.real[i] = ((double)prng_rand(&state))/((double)PRNG_RAND_MAX);
+    data.img[i] = ((double)prng_rand(&state))/((double)PRNG_RAND_MAX);
   }
 
   //Pre-calc twiddles

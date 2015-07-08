@@ -13,12 +13,13 @@ int main(int argc, char **argv)
 {
   struct bench_args_t data;
   int i, fd;
+  struct prng_rand_t state;
 
   // Fill data structure
-  srand(1);
+  prng_srand(1,&state);
   for(i=0; i<N; i++) {
-    data.m1[i] = ((TYPE)rand())/((TYPE)RAND_MAX);
-    data.m2[i] = ((TYPE)rand())/((TYPE)RAND_MAX);
+    data.m1[i] = ((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX);
+    data.m2[i] = ((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX);
   }
 
   // Open and write

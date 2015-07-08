@@ -98,6 +98,25 @@ void test_strings() {
   close(fd);
 }
 
+void test_prng() {
+  struct prng_rand_t S;
+  uint64_t RA[3], RB[3];
+
+  prng_srand(1, &S);
+  RA[0] = prng_rand(&S);
+  RA[1] = prng_rand(&S);
+  RA[2] = prng_rand(&S);
+
+  prng_srand(1, &S);
+  RB[0] = prng_rand(&S);
+  RB[1] = prng_rand(&S);
+  RB[2] = prng_rand(&S);
+
+  assert( RA[0]==RB[0] && "PRNG non-deterministic" );
+  assert( RA[1]==RB[1] && "PRNG non-deterministic" );
+  assert( RA[2]==RB[2] && "PRNG non-deterministic" );
+}
+
 int main(int argc, char **argv)
 {
   test_section_jumping();
@@ -108,6 +127,7 @@ int main(int argc, char **argv)
   test_float_array();
   test_double_array();
   test_strings();
+  test_prng();
 
   printf("Success.\n");
   return 0;

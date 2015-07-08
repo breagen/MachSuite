@@ -3,8 +3,7 @@
 
 int INPUT_SIZE = sizeof(struct bench_args_t);
 
-// Relatively coarse, but FFT's output values are large.
-#define EPSILON 0.001
+#define EPSILON ((TYPE)1.0e-6)
 
 void run_benchmark( void *vargs ) {
   struct bench_args_t *args = (struct bench_args_t *)vargs;

@@ -29,16 +29,17 @@ int main(int argc, char **argv)
   ivector_t b;
   dvector_t points[nAtoms];
   int idx, entry;
+  struct prng_rand_t state;
   //const TYPE infinity = (domainEdge*domainEdge*3.)*1000;//(max length)^2 * 1000
 
   // Create random positions in the box [0,domainEdge]^3
-  srand(1);
+  prng_srand(1,&state);
   i=0;
   while( i<nAtoms ) {
     // Generate a new point
-    p.x = domainEdge*(((TYPE)rand())/((TYPE)RAND_MAX));
-    p.y = domainEdge*(((TYPE)rand())/((TYPE)RAND_MAX));
-    p.z = domainEdge*(((TYPE)rand())/((TYPE)RAND_MAX));
+    p.x = domainEdge*(((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX));
+    p.y = domainEdge*(((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX));
+    p.z = domainEdge*(((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX));
     // Assure that it's not directly on top of another atom
     reject = 0;
     for( idx=0; idx<nAtoms; idx++ ) {

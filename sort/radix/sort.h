@@ -11,6 +11,7 @@ In Proceedings of the 3rd Workshop on General-Purpose Computation on Graphics Pr
 #include "support.h"
 
 #define TYPE int32_t
+#define TYPE_MAX INT32_MAX
 
 #define SIZE 2048
 #define NUMOFBLOCKS 512

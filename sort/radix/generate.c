@@ -13,11 +13,12 @@ int main(int argc, char **argv)
 {
   struct bench_args_t data;
   int i, fd;
+  struct prng_rand_t state;
 
   // Fill data structure
-  srand(1);
+  prng_srand(1,&state);
   for(i=0; i<SIZE; i++)
-    data.a[i] = rand();
+    data.a[i] = prng_rand(&state) & TYPE_MAX;
 
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);

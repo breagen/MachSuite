@@ -39,15 +39,16 @@ int main(int argc, char **argv)
   neighbor_t neighbor_list[nAtoms];
   TYPE x, y, z;
   const TYPE infinity = (domainEdge*domainEdge*3.)*1000;//(max length)^2 * 1000
+  struct prng_rand_t state;
 
   // Create random positions in the box [0,domainEdge]^3
-  srand(1);
+  prng_srand(1,&state);
   i=0;
   while( i<nAtoms ) {
     // Generate a new point
-    x = domainEdge*(((TYPE)rand())/((TYPE)RAND_MAX));
-    y = domainEdge*(((TYPE)rand())/((TYPE)RAND_MAX));
-    z = domainEdge*(((TYPE)rand())/((TYPE)RAND_MAX));
+    x = domainEdge*(((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX));
+    y = domainEdge*(((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX));
+    z = domainEdge*(((TYPE)prng_rand(&state))/((TYPE)PRNG_RAND_MAX));
     // Assure that it's not directly on top of another atom
     reject = 0;
     for( j=0; j<i; j++ ) {
