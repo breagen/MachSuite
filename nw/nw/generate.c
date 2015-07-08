@@ -11,16 +11,17 @@
 int main(int argc, char **argv)
 {
   struct bench_args_t data;
-  //char seqA[N] = "tcgacgaaataggatgacagcacgttctcgtattagagggccgcggtacaaaccaaatgctgcggcgtacagggcacggggcgctgttcgggagatcgggggaatcgtggcgtgggtgattcgccggc";
-  char seqA[N] = "abcdefghijklmnopqrstuvwxz";
-
-  //char seqB[M] = "ttcgagggcgcgtgtcgcggtccatcgacatgcccggtcggtgggacgtgggcgcctgatatagaggaatgcgattggaaggtcggacgggtcggcgagttgggcccggtgaatctgccatggtcgat";
-  char seqB[N] = "abcdefghijklmnopqrstuvwxz";
+  // Must be exact length
+  char seqA[ALEN] = "tcgacgaaataggatgacagcacgttctcgtattagagggccgcggtacaaaccaaatgctgcggcgtacagggcacggggcgctgttcgggagatcgggggaatcgtggcgtgggtgattcgccggc";
+  char seqB[BLEN] = "ttcgagggcgcgtgtcgcggtccatcgacatgcccggtcggtgggacgtgggcgcctgatatagaggaatgcgattggaaggtcggacgggtcggcgagttgggcccggtgaatctgccatggtcgat";
   int fd;
 
+  assert( ALEN==strlen(seqA) && "String initializers must be exact length");
+  assert( BLEN==strlen(seqB) && "String initializers must be exact length");
+
   // Fill data structure
-  memcpy(data.seqA, seqA, N);
-  memcpy(data.seqB, seqB, M);
+  memcpy(data.seqA, seqA, ALEN);
+  memcpy(data.seqB, seqB, BLEN);
 
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);

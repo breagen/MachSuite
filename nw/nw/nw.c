@@ -1,89 +1,91 @@
 #include "nw.h"
 
-void needwun(char SEQA[N], char SEQB[M],
-             char alignedA[N+M], char alignedB[N+M],
-             int A[(N+1)*(M+1)], char ptr[(N+1)*(M+1)]){
+#define MATCH_SCORE 1
+#define MISMATCH_SCORE -1
+#define GAP_SCORE -1
 
-    int score, match, mismatch, gap, choice1, choice2, choice3, max;
-    int i, j, i_t, j_t, Mul1, Mul2, Mul3;
+#define ALIGN '\\'
+#define SKIPA '^'
+#define SKIPB '<'
 
-    match    = 1;
-    mismatch = -1;
-    gap      = -1;
+#define MAX(A,B) ( ((A)>(B))?(A):(B) )
 
-    init_row: for(i=0; i<(N+1); i++){
-        A[i] = i * mismatch;
+void needwun(char SEQA[ALEN], char SEQB[BLEN],
+             char alignedA[ALEN+BLEN], char alignedB[ALEN+BLEN],
+             int M[(ALEN+1)*(BLEN+1)], char ptr[(ALEN+1)*(BLEN+1)]){
+
+    int score, up_left, up, left, max;
+    int row, row_up, r;
+    int a_idx, b_idx;
+    int a_str_idx, b_str_idx;
+
+    init_row: for(a_idx=0; a_idx<(ALEN+1); a_idx++){
+        M[a_idx] = a_idx * GAP_SCORE;
+    }
+    init_col: for(b_idx=0; b_idx<(BLEN+1); b_idx++){
+        M[b_idx*(ALEN+1)] = b_idx * GAP_SCORE;
     }
 
-    init_col: for(i=0; i<(M+1); i++){
-        A[i*(N+1)] = i * mismatch;
-    }
-
-    //matrix Filling Loop
-    fill_out: for(i=1; i<(M+1); i++){
-        fill_in: for(j=1; j<(N+1); j++){
-            if(SEQA[j-1] == SEQB[i-1]){
-                score = match;
+    // Matrix filling loop
+    fill_out: for(b_idx=1; b_idx<(BLEN+1); b_idx++){
+        fill_in: for(a_idx=1; a_idx<(ALEN+1); a_idx++){
+            if(SEQA[a_idx-1] == SEQB[b_idx-1]){
+                score = MATCH_SCORE;
             } else {
-                score = mismatch;
+                score = MISMATCH_SCORE;
             }
 
-            Mul1 = (i-1) * (N+1);
-            Mul2 = (i*(N+1));
+            row_up = (b_idx-1)*(ALEN+1);
+            row = (b_idx)*(ALEN+1);
 
-            choice1 = A[Mul1 + (j-1)] + score;
-            choice2 = A[Mul1 + (j)]   + gap;
-            choice3 = A[Mul2 + (j-1)] + gap;
+            up_left = M[row_up + (a_idx-1)] + score;
+            up      = M[row_up + (a_idx  )] + GAP_SCORE;
+            left    = M[row    + (a_idx-1)] + GAP_SCORE;
 
-            if(choice1 > choice2){
-                max = choice1;
+            max = MAX(up_left, MAX(up, left));
+
+            M[row + a_idx] = max;
+            if(max == left){
+                ptr[row + a_idx] = SKIPB;
+            } else if(max == up){
+                ptr[row + a_idx] = SKIPA;
             } else{
-                max = choice2;
-            }
-            if(choice3 > max){
-                max = choice3;
-            }
-
-            A[Mul2 + j] = max;
-            if(max == choice1){
-                ptr[Mul2 + j] = 0;
-            } else if(max == choice2){
-                ptr[Mul2 + j] = 1;
-            } else{
-                ptr[Mul2 + j] = -1;
+                ptr[row + a_idx] = ALIGN;
             }
         }
     }
 
-    //TraceBack
-    i = M;
-    j = N;
-    i_t = 0;
-    j_t = 0;
+    // TraceBack (n.b. aligned sequences are backwards to avoid string appending)
+    a_idx = ALEN;
+    b_idx = BLEN;
+    a_str_idx = 0;
+    b_str_idx = 0;
 
-    trace: while(i > 0 || j > 0){
-        Mul3 = j*M;
-        if (ptr[i + Mul3] == 0){
-            alignedA[i_t] = SEQA[i];
-            alignedB[j_t] = SEQB[j];
-            j_t++;
-            i_t++;
-            i--;
-            j--;
+    trace: while(a_idx>0 || b_idx>0) {
+        r = b_idx*(ALEN+1);
+        if (ptr[r + a_idx] == ALIGN){
+            alignedA[a_str_idx++] = SEQA[a_idx-1];
+            alignedB[b_str_idx++] = SEQB[b_idx-1];
+            a_idx--;
+            b_idx--;
         }
-        else if(ptr[i + Mul3] == 1){
-            alignedA[i_t] = SEQA[i];
-            alignedB[j_t] = 'X';
-            j_t++;
-            i_t++;
-            i--;
+        else if (ptr[r + a_idx] == SKIPB){
+            alignedA[a_str_idx++] = SEQA[a_idx-1];
+            alignedB[b_str_idx++] = '-';
+            a_idx--;
         }
-        else{
-            alignedA[i_t] = 'X';
-            alignedB[j_t] = SEQB[j];
-            j_t++;
-            i_t++;
-            j--;
+        else{ // SKIPA
+            alignedA[a_str_idx++] = '-';
+            alignedB[b_str_idx++] = SEQB[b_idx-1];
+            b_idx--;
         }
+    }
+
+    // Pad the result
+    pad_a: for( ; a_str_idx<ALEN+BLEN; a_str_idx++ ) {
+      alignedA[a_str_idx] = '_';
+    }
+    pad_b: for( ; b_str_idx<ALEN+BLEN; b_str_idx++ ) {
+      alignedB[b_str_idx] = '_';
     }
 }
