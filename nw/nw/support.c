@@ -20,8 +20,6 @@ void input_to_data(int fd, void *vdata) {
   char *p, *s;
   // Zero-out everything.
   memset(vdata,0,sizeof(struct bench_args_t));
-  memset(data->alignedA,'_',ALEN+BLEN);
-  memset(data->alignedB,'_',ALEN+BLEN);
   // Load input string
   p = readfile(fd);
 
