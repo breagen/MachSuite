@@ -9,6 +9,7 @@ BENCHMARKS=\
 	kmp/kmp \
 	md/knn \
 	md/grid \
+	nw/nw \
 	sort/merge \
 	sort/radix \
 	spmv/crs \
@@ -17,7 +18,6 @@ BENCHMARKS=\
 	stencil/stencil3d \
 #FIXME\
 	backprop/backprop \
-	nw/nw \
 	viterbi/viterbi
 
 CFLAGS=-O3 -Wall -Wno-unused-label
