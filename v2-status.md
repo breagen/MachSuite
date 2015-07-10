@@ -48,7 +48,7 @@ Benchmark | make | in-data | data-out | hdr | checker (status) | checker (summar
 `spmv/ellpack` |X|X|X|X|X|A|Compare vector ±eps
 `stencil/stencil2d` |X|X|X|X|X|A|Compare matrix
 `stencil/stencil3d` |X|X|X|X|X|A|Compare matrix
-`viterbi/viterbi` |X| | | | |+?|(more work needed)
+`viterbi/viterbi` |X|X|X|X|X|+?|(more work needed)
 
 ## Large Inputs
 Benchmark | Generator | header | kernel | size tuned | runtime tuned

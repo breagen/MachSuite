@@ -16,9 +16,9 @@ BENCHMARKS=\
 	spmv/ellpack \
 	stencil/stencil2d \
 	stencil/stencil3d \
+	viterbi/viterbi
 #FIXME\
 	backprop/backprop \
-	viterbi/viterbi
 
 CFLAGS=-O3 -Wall -Wno-unused-label
 
