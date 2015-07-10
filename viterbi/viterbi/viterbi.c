@@ -1,34 +1,65 @@
 #include "viterbi.h"
 
-int viterbi(int Obs[numObs], float transMat[numStates*numObs],
-  float obsLik[numStates*numObs], float v[numStates*numObs]){
-    int i, j, k, finalState;
-    float maxProb, temp;
+int viterbi( tok_t obs[N_OBS], prob_t init[N_STATES], prob_t transition[N_STATES*N_STATES], prob_t emission[N_STATES*N_TOKENS], state_t path[N_OBS] )
+{
+  prob_t llike[N_OBS][N_STATES];
+  step_t t;
+  state_t prev, curr;
+  prob_t min_p, p;
+  state_t min_s, s;
+  // All probabilities are in -log space. (i.e.: P(x) => -log(P(x)) )
+ 
+  // Initialize with first observation and initial probabilities
+  L_init: for( s=0; s<N_STATES; s++ ) {
+    llike[0][s] = init[s] + emission[s*N_TOKENS+obs[0]];
+  }
 
-    finalState = 0;
-
-    v[0] = 1.0;
-
-    v1 : for(i=0; i<numObs;i++){  //for each observation
-       int baseObs =  Obs[i];
-        v2 : for(j=0; j<numStates; j++){    //for each possible state
-            v3 : for(k=0; k<numStates; k++){    //for each
-                temp = v[j*numObs + i] * transMat[j*numObs + k] * obsLik[k*numObs + baseObs];
-                if(temp > v[k*numObs + i+1]){
-                    v[k*numObs + i+1] = temp;
-                }
-            }
+  // Iteratively compute the probabilities over time
+  L_timestep: for( t=1; t<N_OBS; t++ ) {
+    L_curr_state: for( curr=0; curr<N_STATES; curr++ ) {
+      // Compute likelihood HMM is in current state and where it came from.
+      prev = 0;
+      min_p = llike[t-1][prev] +
+              transition[prev*N_STATES+curr] +
+              emission[curr*N_TOKENS+obs[t]];
+      L_prev_state: for( prev=1; prev<N_STATES; prev++ ) {
+        p = llike[t-1][prev] +
+            transition[prev*N_STATES+curr] +
+            emission[curr*N_TOKENS+obs[t]];
+        if( p<min_p ) {
+          min_p = p;
         }
+      }
+      llike[t][curr] = min_p;
     }
+  }
 
-    maxProb = (float)0.0;
-
-    v4 : for(i=1;i<numStates+1;i++){
-        if(v[i*numObs-1] > maxProb){
-            finalState = i - 1;
-            maxProb = v[i*numObs-1];
-        }
+  // Identify end state
+  min_s = 0;
+  min_p = llike[N_OBS-1][min_s];
+  L_end: for( s=1; s<N_STATES; s++ ) {
+    p = llike[N_OBS-1][s];
+    if( p<min_p ) {
+      min_p = p;
+      min_s = s;
     }
+  }
+  path[N_OBS-1] = min_s;
 
-    return finalState;
+  // Backtrack to recover full path
+  L_backtrack: for( t=N_OBS-2; t>=0; t-- ) {
+    min_s = 0;
+    min_p = llike[t][min_s] + transition[min_s*N_STATES+path[t+1]];
+    L_state: for( s=1; s<N_STATES; s++ ) {
+      p = llike[t][s] + transition[s*N_STATES+path[t+1]];
+      if( p<min_p ) {
+        min_p = p;
+        min_s = s;
+      }
+    }
+    path[t] = min_s;
+  }
+
+  return 0;
 }
+
