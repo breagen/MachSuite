@@ -22,6 +22,8 @@ BENCHMARKS=\
 
 CFLAGS=-O3 -Wall -Wno-unused-label
 
+.PHONY: build run generate all test clean
+
 build:
 	@( for b in $(BENCHMARKS); do $(MAKE) CFLAGS="$(CFLAGS)" -C $$b; done )
 
