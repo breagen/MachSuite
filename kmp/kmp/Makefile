@@ -3,7 +3,7 @@ ALG=kmp
 
 CFLAGS?=-O3 -Wall -Wno-unused-label
 
-SRCS=$(KERN).c support.c ../../common/support.c
+SRCS=$(KERN).c local_support.c ../../common/support.c
 FILES=$(SRCS) $(KERN).h ../../common/support.h
 
 $(KERN): $(FILES) ../../common/harness.c
