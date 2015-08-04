@@ -7,7 +7,6 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <fcntl.h>
-#include <sys/mman.h>
 #include <sys/stat.h>
 
 // In general, fd_printf is used for individual values.
@@ -36,14 +35,20 @@ char *readfile(int fd) {
   char *p; 
   struct stat s;
   off_t len;
+  ssize_t bytes_read, status;
 
   assert(fd>1 && "Invalid file descriptor");
   assert(0==fstat(fd, &s) && "Couldn't determine file size");
   len = s.st_size;
   assert(len>0 && "File is empty");
-  p = mmap(NULL, len, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0); 
-  assert(p!=NULL && "Couldn't mmap file");
-  close(fd); // Does not un-map *p
+  p = (char *)malloc(len);
+  bytes_read = 0;
+  while( bytes_read<len ) {
+    status = read(fd, &p[bytes_read], len-bytes_read);
+    assert(status>=0 && "read() failed");
+    bytes_read+=status;
+  }
+  close(fd);
   return p;
 }
 
@@ -100,16 +105,16 @@ int parse_##TYPE##_array(char *s, TYPE *arr, int n) { \
   line = strtok(s,"\n"); \
   while( line!=NULL && i<n ) { \
     endptr = line; \
-    errno=0; \
+    /*errno=0;*/ \
     v = (TYPE)(STRTOTYPE(line, &endptr)); \
     if( (*endptr)!=(char)0 ) { \
       fprintf(stderr, "Invalid input: line %d of section\n", i); \
     } \
     /*assert((*endptr)==(char)0 && "Invalid input character"); */\
-    if( errno!=0 ) { \
+    /*if( errno!=0 ) { \
       fprintf(stderr, "Couldn't convert string \"%s\": line %d of section\n", line, i); \
-    } \
-    assert(errno==0 && "Couldn't convert the string"); \
+    }*/ \
+    /*assert(errno==0 && "Couldn't convert the string"); */\
     arr[i] = v; \
     i++; \
     line[strlen(line)] = '\n'; /* Undo the strtok replacement.*/ \
