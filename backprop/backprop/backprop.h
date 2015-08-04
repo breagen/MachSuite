@@ -1,52 +1,46 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
+#include "../../common/support.h"
 
+// Fixed parameters
+#define input_dimension  13
+#define possible_outputs  3
+#define training_sets   163
+#define nodes_per_layer  64
+#define layers            2
+#define learning_rate  0.01
+#define epochs            1
+#define test_sets        15
+#define norm_param    0.005
+
+#define max 1.0
+#define offset 0.5
+
+//Data Bounds
 #define TYPE double
+#define MAX 1000
+#define MIN 1
 
-//Number of times you train the network with the same data set
-#define EPOCS 100
-
-//Number of training data
-#define NUM_TRAIN 100
-
-#define MAX_ROWS 10
-#define MAX_COLS 10
-
-#define NUM_LAYERS 3
-
-//Number of acspects for each training data
-#define SIZE_IN 4
-
-//Classification catagories (output nodes)
-#define SIZE_OUT 10
-
-//Learning Rate
-#define N 0.5
-
-//Momentum
-#define M 0.1
-
-static const int layer_size[] = {SIZE_IN, MAX_COLS, SIZE_OUT};
-
-void backprop(TYPE weights[NUM_LAYERS - 1][MAX_ROWS][MAX_COLS],
-        TYPE inputs[NUM_TRAIN][SIZE_IN],
-        TYPE targets[NUM_TRAIN][SIZE_OUT]);
-
+void backprop(
+    TYPE weights1[input_dimension*nodes_per_layer],
+    TYPE weights2[nodes_per_layer*nodes_per_layer],
+    TYPE weights3[nodes_per_layer*possible_outputs],
+    TYPE biases1[nodes_per_layer],
+    TYPE biases2[nodes_per_layer],
+    TYPE biases3[possible_outputs],
+    TYPE training_data[training_sets*input_dimension],
+    TYPE training_targets[training_sets*possible_outputs]);
 ////////////////////////////////////////////////////////////////////////////////
 // Test harness interface code.
 
 struct bench_args_t {
-        TYPE weights[NUM_LAYERS - 1][MAX_ROWS][MAX_COLS];
-        TYPE inputs[NUM_TRAIN][SIZE_IN];
-        TYPE targets[NUM_TRAIN][SIZE_OUT];
+    TYPE weights1[input_dimension*nodes_per_layer];
+    TYPE weights2[nodes_per_layer*nodes_per_layer];
+    TYPE weights3[nodes_per_layer*possible_outputs];
+    TYPE biases1[nodes_per_layer];
+    TYPE biases2[nodes_per_layer];
+    TYPE biases3[possible_outputs];
+    TYPE training_data[training_sets*input_dimension];
+    TYPE training_targets[training_sets*possible_outputs];
 };
-int INPUT_SIZE = sizeof(struct bench_args_t);
-
-
-void run_benchmark( void *vargs ) {
-  struct bench_args_t *args = (struct bench_args_t *)vargs;
-  backprop( args->weights, args->inputs, args->targets );
-}
-
-////////////////////////////////////////////////////////////////////////////////

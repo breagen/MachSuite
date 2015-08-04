@@ -1,183 +1,288 @@
 #include "backprop.h"
 
-//Activation function..
-TYPE sigmoid(TYPE x){
-    TYPE temp, one;
-    one = (double)1.0;
-    temp = one + exp(-x);
-    temp = one/temp;
-    return temp;
-}
-
-void update_layer(int numIn, int numOut, TYPE weightsIn[MAX_ROWS][MAX_COLS], TYPE activationsIn[], TYPE activationsOut[]){
-    int ii, jj;
+void soft_max(TYPE net_outputs[possible_outputs], TYPE activations[possible_outputs]) {
+    int i;
     TYPE sum;
-    sum = 0.0;
+    sum = (TYPE) 0.0;
 
-    ul_1 : for(ii = 0; ii < numOut; ii++){
-        sum = 0.0;
-        ul_2 : for(jj = 0; jj < numIn; jj++){
-            sum = sum + activationsIn[jj] * weightsIn[jj][ii];
-        }
-        activationsOut[ii] = sigmoid(sum);
+    for(i=0; i < possible_outputs; i++) {
+        sum += exp(-activations[i]);
+    }
+    for(i=0; i < possible_outputs; i++) {
+        net_outputs[i] = exp(-activations[i])/sum;
     }
 }
 
-void update(TYPE weights[][MAX_ROWS][MAX_COLS],
-        TYPE *input,
-        TYPE activations[][MAX_ROWS]){
+void RELU(TYPE activations[nodes_per_layer], TYPE dactivations[nodes_per_layer], int size) {
     int i;
-
-    //initialize first activation layer to be the inputs to the nnet..
-    u_1 : for(i = 0; i < layer_size[0]; i++){
-        activations[0][i] = input[i];
-    }
-
-    //iterate over each weight layer...
-    u_2 : for(i = 0; i < NUM_LAYERS - 1; i++){
-        update_layer(layer_size[i], layer_size[i + 1], weights[i], activations[i], activations[i + 1]);
+    for( i = 0; i < size; i++) {
+        dactivations[i] = activations[i]*(1.0-activations[i]);
+        activations[i] = 1.0/(1.0+exp(-activations[i]));
     }
 }
 
-void propagate_error_out(TYPE *activationsOut, TYPE *deltas, TYPE *targets){
+void add_bias_to_activations(TYPE biases[nodes_per_layer], 
+                               TYPE activations[nodes_per_layer],
+                               int size) {
     int i;
-    TYPE error;
-    error = 0.0;
-
-    //from the output layer to the N-1 hidden layer update the deltas...
-    p_1 : for(i = 0; i < layer_size[NUM_LAYERS - 1]; i++){
-        error = targets[i] - activationsOut[i];
-        deltas[i] = sigmoid(activationsOut[i]) * error;
+    for( i = 0; i < size; i++){
+        activations[i] = activations[i] + biases[i];
     }
 }
 
-
-void propagate_error_layer(int level,
-        int level_in, int level_out,
-        TYPE weightsIn[MAX_ROWS][MAX_COLS],
-        TYPE *activationsOut,
-        TYPE *deltasIn, TYPE *deltasOut){
-
-    int kk, jj;
-    TYPE error;
-
-    //for the take in the last calc activities and deltas and comp differences...
-    //In and Out are relative to the way BACKPROP is moving... opposite the forward pass...
-
-    pel_1 : for(jj = 0; jj < layer_size[level]; jj++){
-        error = 0.0;
-        pel_2 : for(kk = 0; kk < layer_size[level + 1]; kk++){
-            error = error + deltasIn[kk] * weightsIn[jj][kk];
-        }
-        deltasOut[jj] = sigmoid(activationsOut[jj]) * error;
-    }
-}
-
-void update_weights(int level,
-        TYPE weights[][MAX_COLS],
-        TYPE *deltas, TYPE activations[],
-        TYPE changeMat[][MAX_COLS]){
-
-    int ii, jj;
-    TYPE change, newW;
-
-    uw_1 : for(ii = 0; ii < layer_size[level - 1]; ii++){
-        uw_2 : for(jj = 0; jj < layer_size[level]; jj++){
-            change = deltas[jj]*activations[ii];
-            newW = weights[ii][jj] + N*change + M*changeMat[ii][jj];
-
-            //Can try without using a change matrix.. saves space! lowers accuracy...
-            //newW = weights[ii][jj] + N*change;// + M*changeMat[ii][jj];
-            weights[ii][jj] = newW;
-            changeMat[ii][jj] = change;
+void matrix_vector_product_with_bias_input_layer(TYPE biases[nodes_per_layer],
+                                                 TYPE weights[input_dimension*nodes_per_layer],
+                                                 TYPE activations[nodes_per_layer],
+                                                 TYPE input_sample[input_dimension]){
+    int i,j;
+    for(j = 0; j < nodes_per_layer; j++){
+        activations[j] = (TYPE)0.0;
+        for (i = 0; i < input_dimension; i++){
+            activations[j] += weights[i*input_dimension + j] * input_sample[i];
         }
     }
+    add_bias_to_activations(biases, activations, nodes_per_layer);
 }
 
-void propagate_errors(TYPE weights[][MAX_ROWS][MAX_COLS],
-        TYPE activations[][MAX_ROWS],
-        TYPE *targets,
-        TYPE changeMat[NUM_LAYERS - 1][MAX_ROWS][MAX_COLS]){
+void matrix_vector_product_with_bias_second_layer(TYPE biases[nodes_per_layer],
+                                                 TYPE weights[nodes_per_layer*nodes_per_layer],
+                                                 TYPE activations[nodes_per_layer],
+                                                 TYPE input_activations[nodes_per_layer]){
+    int i,j;
+    for (i = 0; i < nodes_per_layer; i++){
+        activations[i] = (TYPE)0.0;
+        for(j = 0; j < nodes_per_layer; j++){
+            activations[i] += weights[j*nodes_per_layer + i] * input_activations[j];
+        }
+    }
+    add_bias_to_activations(biases, activations, nodes_per_layer);
+}
 
+void matrix_vector_product_with_bias_output_layer(TYPE biases[possible_outputs],
+                                                 TYPE weights[nodes_per_layer*possible_outputs],
+                                                 TYPE activations[possible_outputs],
+                                                 TYPE input_activations[nodes_per_layer]){
     int i, j;
-    TYPE deltas[NUM_LAYERS][MAX_ROWS];
-    //TYPE deltas[NUM_LAYERS - 1][MAX_ROWS];
-
-    pe_1 : for(i = 0; i < NUM_LAYERS - 1; i++){
-        pe_2 : for(j = 0; j<MAX_ROWS; j++){
-            deltas[i][j] = 0.0;
+    for(j = 0; j < possible_outputs; j++){
+        activations[j] = (TYPE)0.0;
+        for (i = 0; i < nodes_per_layer; i++){
+            activations[j] += weights[i*nodes_per_layer + j] * input_activations[i];
         }
     }
-
-    propagate_error_out(activations[NUM_LAYERS - 1], deltas[NUM_LAYERS - 2], targets);
-
-    pe_3 : for(i = NUM_LAYERS - 2; i > 0; i--){
-        j = i - 1;
-        propagate_error_layer(i, j, i, weights[i], activations[i], deltas[i], deltas[j]);
-    }
-
-    pe_4 : for(i = NUM_LAYERS - 1; i >= 1; i--){
-        j = i - 1;
-        update_weights(i, weights[j], deltas[j], activations[j], changeMat[i]);
-    }
+    add_bias_to_activations(biases, activations, possible_outputs);
 }
 
-TYPE comp_error(TYPE *targets, TYPE *activations){
+void take_difference(TYPE net_outputs[possible_outputs], 
+                     TYPE solutions[possible_outputs], 
+                     TYPE output_difference[possible_outputs],
+                     TYPE dactivations[possible_outputs]) {
     int i;
-    TYPE error, temp;
-
-    error = 0.0;
-    temp = 0.0;
-
-    ce_1 :for(i = 0; i < SIZE_OUT; i++){
-        temp = targets[i] - activations[i];
-        error = error + 0.5*temp*temp;
+    for( i = 0; i < possible_outputs; i++){
+        output_difference[i] = (((net_outputs[i]) - solutions[i]) * -1.0) * dactivations[i];
     }
-
-    return error;
 }
 
-void backprop(TYPE weights[NUM_LAYERS - 1][MAX_ROWS][MAX_COLS],
-        TYPE inputs[NUM_TRAIN][SIZE_IN],
-        TYPE targets[NUM_TRAIN][SIZE_OUT]){
-
-    int ee, rows, cols, jj;
-    TYPE error;
-    error = 0.0;
-
-    TYPE changeMat[NUM_LAYERS][MAX_ROWS][MAX_COLS];
-    TYPE activations[NUM_LAYERS][MAX_ROWS];
-
-    bp_1 : for(ee = 0; ee < NUM_LAYERS; ee++){
-        bp_2 : for(rows = 0; rows < MAX_ROWS; rows++){
-            activations[ee][rows]= 1.0;
-            bp_3 : for(cols = 0; cols < MAX_COLS; cols++){
-                changeMat[ee][rows][cols] = 0.0;
-            }
-        }
-    }
-
-    epochs_l : for(ee = 0; ee < EPOCS; ee++){
-        error = 0.0;
-        init_1 : for(jj = 0; jj < NUM_TRAIN; jj++){
-            init_2 : for(cols = 0; cols < NUM_LAYERS; cols++){
-                init_3 : for(rows = 0; rows < MAX_ROWS; rows++){
-                    activations[cols][rows]= 1.0;
-                }
-            }
-
-            //Run forward pass of the training data through the network
-            //get activations input stimulated
-            update(weights, inputs[jj], activations);
-
-            //Adjust weights based on deltas between generated output and
-            //known answer
-            propagate_errors(weights, activations, targets[jj], changeMat);
-
-            //Currently using synthetic I/O
-            //error rate is irrelivant
-            error += comp_error(targets[jj], activations[NUM_LAYERS - 1]);
+void get_delta_matrix_weights3(TYPE delta_weights3[nodes_per_layer*possible_outputs],
+                               TYPE output_difference[possible_outputs],
+                               TYPE last_activations[nodes_per_layer]) {
+    int i, j;
+    for( i = 0; i < nodes_per_layer; i++) {
+        for( j = 0; j < possible_outputs; j++) {
+            delta_weights3[i*possible_outputs + j] = last_activations[i] * output_difference[j];
         }
     }
 }
 
+void get_oracle_activations2(TYPE weights3[nodes_per_layer*possible_outputs], 
+                             TYPE output_differences[possible_outputs], 
+                             TYPE oracle_activations[nodes_per_layer],
+                             TYPE dactivations[nodes_per_layer]) {
+    int i, j;
+    for( i = 0; i < nodes_per_layer; i++) {
+        oracle_activations[i] = (TYPE)0.0;
+        for( j = 0; j < possible_outputs; j++) {
+            oracle_activations[i] += output_differences[j] * weights3[i*possible_outputs + j];
+        }
+        oracle_activations[i] = oracle_activations[i] * dactivations[i];
+    }
+}
+
+void get_delta_matrix_weights2(TYPE delta_weights2[nodes_per_layer*nodes_per_layer],
+                               TYPE output_difference[nodes_per_layer],
+                               TYPE last_activations[nodes_per_layer]) {
+    int i, j;
+    for( i = 0; i < nodes_per_layer; i++) {
+        for( j = 0; j < nodes_per_layer; j++) {
+            delta_weights2[i*nodes_per_layer + j] = last_activations[i] * output_difference[j];
+        }
+    }
+}
+
+void get_oracle_activations1(TYPE weights2[nodes_per_layer*nodes_per_layer], 
+                             TYPE output_differences[nodes_per_layer], 
+                             TYPE oracle_activations[nodes_per_layer],
+                             TYPE dactivations[nodes_per_layer]) {
+    int i, j;
+    for( i = 0; i < nodes_per_layer; i++) {
+        oracle_activations[i] = (TYPE)0.0;
+        for( j = 0; j < nodes_per_layer; j++) {
+            oracle_activations[i] += output_differences[j] * weights2[i*nodes_per_layer + j];
+        }
+        oracle_activations[i] = oracle_activations[i] * dactivations[i];
+    }
+}
+
+void get_delta_matrix_weights1(TYPE delta_weights1[input_dimension*nodes_per_layer],
+                               TYPE output_difference[nodes_per_layer],
+                               TYPE last_activations[input_dimension]) {
+    int i, j;
+    for( i = 0; i < input_dimension; i++) {
+        for( j = 0; j < nodes_per_layer; j++) {
+            delta_weights1[i*nodes_per_layer + j] = last_activations[i] * output_difference[j];
+        }
+    }
+}
+
+void update_weights(TYPE weights1[input_dimension*nodes_per_layer],
+                    TYPE weights2[nodes_per_layer*nodes_per_layer],
+                    TYPE weights3[nodes_per_layer*possible_outputs],
+                    TYPE d_weights1[input_dimension*nodes_per_layer],
+                    TYPE d_weights2[nodes_per_layer*nodes_per_layer],
+                    TYPE d_weights3[nodes_per_layer*possible_outputs],
+                    TYPE biases1[nodes_per_layer],
+                    TYPE biases2[nodes_per_layer],
+                    TYPE biases3[possible_outputs],
+                    TYPE d_biases1[nodes_per_layer],
+                    TYPE d_biases2[nodes_per_layer],
+                    TYPE d_biases3[possible_outputs]) {
+    int i, j;
+    double norm, bias_norm;
+    norm = 0.0;
+    bias_norm = 0.0;
+
+    for(i=0; i < input_dimension; i++){
+        for(j = 0; j < nodes_per_layer; j++){
+            weights1[i*nodes_per_layer + j] -= (d_weights1[i*nodes_per_layer + j] * learning_rate);
+            norm += weights1[i*nodes_per_layer + j]*weights1[i*nodes_per_layer + j];
+        }
+    }
+    for(i=0; i < nodes_per_layer; i++){
+        biases1[i] -= (d_biases1[i]*learning_rate);
+        bias_norm += biases1[i]*biases1[i];
+    }
+    
+    norm = sqrt(norm);
+    bias_norm = sqrt(bias_norm);
+
+    for(i=0; i < input_dimension; i++){
+        for(j = 0; j < nodes_per_layer; j++){
+            weights1[i*nodes_per_layer + j] = (weights1[i*nodes_per_layer + j]/norm);
+        }
+    }
+    for(i=0; i < nodes_per_layer; i++){
+        biases1[i] = (biases1[i]/bias_norm);
+    }
+
+    norm = (double)0.0;
+    bias_norm = (double)0.0;
+
+    for(i=0; i < nodes_per_layer; i++){
+        for(j = 0; j < nodes_per_layer; j++){
+            weights2[i*nodes_per_layer + j] -= (d_weights2[i*nodes_per_layer + j] * learning_rate);
+            norm += weights2[i*nodes_per_layer + j]*weights2[i*nodes_per_layer + j];
+        }
+    }
+    for(i=0; i < nodes_per_layer; i++){
+        biases2[i] -= (d_biases2[i]*learning_rate);
+        bias_norm += biases2[i]*biases2[i];
+    }
+
+    norm = sqrt(norm);
+    bias_norm = sqrt(bias_norm);
+
+    for(i=0; i < nodes_per_layer; i++){
+        for(j = 0; j < nodes_per_layer; j++){
+            weights2[i*nodes_per_layer + j] = (weights2[i*nodes_per_layer + j]/norm);
+        }
+    }
+    for(i=0; i < nodes_per_layer; i++){
+        biases2[i] = (biases2[i]/bias_norm);
+    }
+
+    norm = (double)0.0;
+    bias_norm = (double)0.0;
+
+    for(i=0; i < nodes_per_layer; i++){
+        for(j = 0; j < possible_outputs; j++){
+            weights3[i*possible_outputs + j] -= (d_weights3[i*possible_outputs + j] * learning_rate);
+            norm += weights3[i*possible_outputs + j]*weights3[i*possible_outputs + j];
+        }
+    }
+    for(i=0; i<possible_outputs;i++){
+        biases3[i] -= d_biases3[i]*learning_rate;
+        bias_norm += biases3[i]*biases3[i];
+    }
+
+    norm = sqrt(norm);
+    bias_norm = sqrt(bias_norm);
+
+    for(i=0; i < nodes_per_layer; i++){
+        for(j = 0; j < possible_outputs; j++){
+            weights3[i*possible_outputs + j] = (weights3[i*possible_outputs + j]/norm);
+        }
+    }
+    for(i=0; i < possible_outputs; i++){
+        biases3[i] = (biases3[i]/bias_norm);
+    }
+}
+
+void backprop(TYPE weights1[input_dimension*nodes_per_layer], 
+                TYPE weights2[nodes_per_layer*nodes_per_layer],
+                TYPE weights3[nodes_per_layer*possible_outputs],
+                TYPE biases1[nodes_per_layer], 
+                TYPE biases2[nodes_per_layer],
+                TYPE biases3[possible_outputs],
+                TYPE training_data[training_sets*input_dimension],
+                TYPE training_targets[training_sets*possible_outputs]) {
+    int i,j;
+    //Forward and training structures
+    TYPE activations1[nodes_per_layer];
+    TYPE activations2[nodes_per_layer];
+    TYPE activations3[possible_outputs];
+    TYPE dactivations1[nodes_per_layer];
+    TYPE dactivations2[nodes_per_layer];
+    TYPE dactivations3[possible_outputs];
+    TYPE net_outputs[possible_outputs];
+    //Training structure
+    TYPE output_difference[possible_outputs];
+    TYPE delta_weights1[input_dimension*nodes_per_layer]; 
+    TYPE delta_weights2[nodes_per_layer*nodes_per_layer];
+    TYPE delta_weights3[nodes_per_layer*possible_outputs];
+    TYPE oracle_activations1[nodes_per_layer];
+    TYPE oracle_activations2[nodes_per_layer];
+
+    for(i=0; i<training_sets; i++){
+        for(j=0;j<nodes_per_layer;j++){
+            activations1[j] = (TYPE)0.0;
+            activations2[j] = (TYPE)0.0;
+            if(j<possible_outputs){
+                activations3[j] = (TYPE)0.0;
+            }
+        }
+        matrix_vector_product_with_bias_input_layer(biases1, weights1, activations1, &training_data[i*input_dimension]);
+        RELU(activations1, dactivations1, nodes_per_layer);
+        matrix_vector_product_with_bias_second_layer(biases2, weights2, activations2, activations1);
+        RELU(activations2, dactivations2, nodes_per_layer);
+        matrix_vector_product_with_bias_output_layer(biases3, weights3, activations3, activations2);
+        RELU(activations3, dactivations3, possible_outputs);
+        soft_max(net_outputs, activations3);
+        take_difference(net_outputs, &training_targets[i*possible_outputs], output_difference, dactivations3);
+        get_delta_matrix_weights3(delta_weights3, output_difference, activations2);
+        get_oracle_activations2(weights3, output_difference, oracle_activations2, dactivations2);
+        get_delta_matrix_weights2(delta_weights2, oracle_activations2, activations1);
+        get_oracle_activations1(weights2, oracle_activations2, oracle_activations1, dactivations1);
+        get_delta_matrix_weights1(delta_weights1, oracle_activations1, &training_data[i*input_dimension]);
+        update_weights(weights1, weights2, weights3, delta_weights1, delta_weights2, delta_weights3, 
+                       biases1, biases2, biases3, oracle_activations1, oracle_activations2, output_difference);
+    }
+}

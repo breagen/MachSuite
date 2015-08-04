@@ -3,17 +3,17 @@ ALG=backprop
 
 CFLAGS?=-O3 -Wall -Wno-unused-label
 
-SRCS=$(KERN).c support.c ../../common/support.c
+SRCS=$(KERN).c local_support.c ../../common/support.c
 FILES=$(SRCS) $(KERN).h ../../common/support.h
 
 $(KERN): $(FILES) ../../common/harness.c
-	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c -lm
 
 run: $(KERN) input.data check.data
 	./$(KERN) input.data check.data
 
 generate: $(FILES) generate.c
-	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c
+	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c -lm
 	./generate
 
 hls: $(KERN).c $(KERN).h
