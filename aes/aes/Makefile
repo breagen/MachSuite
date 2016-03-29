@@ -1,11 +1,23 @@
-aes: aes.c aes.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o aes aes.c ../../common/harness.c
+KERN=aes
+ALG=aes
 
-run: aes input.data check.data
-	./aes input.data check.data
+CFLAGS?=-O3 -Wall -Wno-unused-label
 
-hls: aes.c aes.h
+SRCS=$(KERN).c local_support.c ../../common/support.c
+FILES=$(SRCS) $(KERN).h ../../common/support.h
+
+$(KERN): $(FILES) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+
+run: $(KERN) input.data check.data
+	./$(KERN) input.data check.data
+
+generate: $(FILES) generate.c
+	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c
+	./generate
+
+hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f aes
+	rm -f $(KERN) generate output.data

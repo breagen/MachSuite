@@ -6,23 +6,22 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <assert.h>
+#include <math.h>
 
 #include "fft.h"
-// Fake benchmark function to satisfy the extern
-void fft(double real[size], double img[size], double real_twid[size], double img_twid[size]){ }
 
-void generate_binary()
+int main(int argc, char **argv)
 {
   struct bench_args_t data;
-  char *ptr;
-  int status, i, n, fd, written=0;
+  int i, n, fd;
   double typed;
+  struct prng_rand_t state;
 
   // Fill data structure
-  srandom(1);
+  prng_srand(1, &state);
   for(i=0; i<size; i++){
-    data.real[i] = random();
-    data.img[i] = random();
+    data.real[i] = ((double)prng_rand(&state))/((double)PRNG_RAND_MAX);
+    data.img[i] = ((double)prng_rand(&state))/((double)PRNG_RAND_MAX);
   }
 
   //Pre-calc twiddles
@@ -35,17 +34,7 @@ void generate_binary()
   // Open and write
   fd = open("input.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( fd>0 && "Couldn't open input data file" );
+  data_to_input(fd, (void *)(&data));
 
-  ptr = (char *) &data;
-  while( written<sizeof(data) ) {
-    status = write( fd, ptr, sizeof(data)-written );
-    assert( status>=0 && "Couldn't write input data file" );
-    written += status;
-  }
-}
-
-int main(int argc, char **argv)
-{
-  generate_binary();
   return 0;
 }

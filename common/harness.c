@@ -3,26 +3,22 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <assert.h>
-extern int INPUT_SIZE;
-void run_benchmark( void *args );
 
-//#define CHECK_OUTPUT
+#define WRITE_OUTPUT
+#define CHECK_OUTPUT
+
+#include "support.h"
 
 int main(int argc, char **argv)
 {
-  int status;
-  int in_fd;
+  // Parse command line.
   char *in_file;
-  char *input;
   #ifdef CHECK_OUTPUT
-  int check_fd;
   char *check_file;
-  char *check;
   #endif
-  int n;
-
-  //assert( argc==3 && "Usage: ./benchmark <input_file> <check_file>" );
+  assert( argc<4 && "Usage: ./benchmark <input_file> <check_file>" );
   in_file = "input.data";
   #ifdef CHECK_OUTPUT
   check_file = "check.data";
@@ -35,49 +31,42 @@ int main(int argc, char **argv)
   #endif
 
   // Load input data
-  input = malloc(INPUT_SIZE);
-  assert( input!=NULL && "Out of memory" );
+  int in_fd;
+  char *data;
+  data = malloc(INPUT_SIZE);
+  assert( data!=NULL && "Out of memory" );
   in_fd = open( in_file, O_RDONLY );
-
-  n = 0;
-  while(n<INPUT_SIZE) {
-    status = read(in_fd, &input[n], INPUT_SIZE-n);
-    assert( status>=0 && "Failed to read input" );
-    n += status;
-  }
-  close(in_fd);
-
-  //run_benchmark( input );
+  assert( in_fd>0 && "Couldn't open input data file");
+  input_to_data(in_fd, data);
+  
   // Unpack and call
-  run_benchmark( input );
-  //#if WRITE_OUTPUT
-  //FIXME: Maybe remove this.
-  int out_fd, written=0;
-  char *ptr = input;
+  run_benchmark( data );
+
+  #ifdef WRITE_OUTPUT
+  int out_fd;
   out_fd = open("output.data", O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
   assert( out_fd>0 && "Couldn't open output data file" );
-  while( written<INPUT_SIZE ) {
-    status = write( out_fd, ptr, INPUT_SIZE-written );
-    assert( status>=0 && "Couldn't write output data file" );
-    written += status;
-  }
-  //#endif
+  data_to_output(out_fd, data);
+  close(out_fd);
+  #endif
 
   // Load check data
   #ifdef CHECK_OUTPUT
-  check = malloc(INPUT_SIZE);
-  assert( check!=NULL && "Out of memory" );
+  int check_fd;
+  char *ref;
+  ref = malloc(INPUT_SIZE);
+  assert( ref!=NULL && "Out of memory" );
   check_fd = open( check_file, O_RDONLY );
-  n = 0;
-  while(n<INPUT_SIZE) {
-    status = read(check_fd, &check[n], INPUT_SIZE-n);
-    assert( status>=0 && "Failed to read input" );
-    n += status;
-  }
-  close(check_fd);
+  assert( check_fd>0 && "Couldn't open check data file");
+  output_to_data(check_fd, ref);
+  #endif
 
   // Validate benchmark results
-  assert( !memcmp(input,check,INPUT_SIZE) && "Benchmark results are incorrect" );
+  #ifdef CHECK_OUTPUT
+  if( !check_data(data, ref) ) {
+    fprintf(stderr, "Benchmark results are incorrect\n");
+    return -1;
+  }
   #endif
 
   printf("Success.\n");

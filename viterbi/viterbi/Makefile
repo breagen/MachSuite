@@ -1,11 +1,23 @@
-viterbi: viterbi.c viterbi.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o viterbi viterbi.c ../../common/harness.c
+KERN=viterbi
+ALG=viterbi
 
-run: viterbi input.data check.data
-	./viterbi input.data check.data
+CFLAGS?=-O3 -Wall -Wno-unused-label
 
-hls: viterbi.c viterbi.h
+SRCS=$(KERN).c local_support.c ../../common/support.c
+FILES=$(SRCS) $(KERN).h ../../common/support.h
+
+$(KERN): $(FILES) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+
+run: $(KERN) input.data check.data
+	./$(KERN) input.data check.data
+
+generate: $(FILES) generate.c
+	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c -lm
+	./generate
+
+hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f viterbi
+	rm -f $(KERN) generate output.data

@@ -1,11 +1,23 @@
-queue: queue.c queue.h ../../common/harness.c
-	$(CC) $(CFLAGS) -o queue queue.c ../../common/harness.c
+KERN=bfs
+ALG=queue
 
-run: queue input.data check.data
-	./queue input.data check.data
+CFLAGS?=-O3 -Wall -Wno-unused-label
 
-hls: queue.c queue.h
+SRCS=$(KERN).c local_support.c ../../common/support.c
+FILES=$(SRCS) $(KERN).h ../../common/support.h
+
+$(KERN): $(FILES) ../../common/harness.c
+	$(CC) $(CFLAGS) -I../../common -o $(KERN) $(SRCS) ../../common/harness.c
+
+run: $(KERN) input.data check.data
+	./$(KERN) input.data check.data
+
+generate: $(FILES) generate.c
+	$(CC) $(CFLAGS) -I../../common -o generate $(SRCS) generate.c
+	./generate
+
+hls: $(KERN).c $(KERN).h
 	vivado_hls hls.tcl
 
 clean:
-	rm -f queue
+	rm -f $(KERN) generate output.data
