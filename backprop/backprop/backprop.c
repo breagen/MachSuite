@@ -38,7 +38,7 @@ void matrix_vector_product_with_bias_input_layer(TYPE biases[nodes_per_layer],
     for(j = 0; j < nodes_per_layer; j++){
         activations[j] = (TYPE)0.0;
         for (i = 0; i < input_dimension; i++){
-            activations[j] += weights[i*input_dimension + j] * input_sample[i];
+            activations[j] += weights[j*input_dimension + i] * input_sample[i];
         }
     }
     add_bias_to_activations(biases, activations, nodes_per_layer);
@@ -52,7 +52,7 @@ void matrix_vector_product_with_bias_second_layer(TYPE biases[nodes_per_layer],
     for (i = 0; i < nodes_per_layer; i++){
         activations[i] = (TYPE)0.0;
         for(j = 0; j < nodes_per_layer; j++){
-            activations[i] += weights[j*nodes_per_layer + i] * input_activations[j];
+            activations[i] += weights[i*nodes_per_layer + j] * input_activations[j];
         }
     }
     add_bias_to_activations(biases, activations, nodes_per_layer);
@@ -66,7 +66,7 @@ void matrix_vector_product_with_bias_output_layer(TYPE biases[possible_outputs],
     for(j = 0; j < possible_outputs; j++){
         activations[j] = (TYPE)0.0;
         for (i = 0; i < nodes_per_layer; i++){
-            activations[j] += weights[i*nodes_per_layer + j] * input_activations[i];
+            activations[j] += weights[j*nodes_per_layer + i] * input_activations[i];
         }
     }
     add_bias_to_activations(biases, activations, possible_outputs);

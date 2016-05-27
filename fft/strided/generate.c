@@ -19,14 +19,14 @@ int main(int argc, char **argv)
 
   // Fill data structure
   prng_srand(1, &state);
-  for(i=0; i<size; i++){
+  for(i=0; i<FFT_SIZE; i++){
     data.real[i] = ((double)prng_rand(&state))/((double)PRNG_RAND_MAX);
     data.img[i] = ((double)prng_rand(&state))/((double)PRNG_RAND_MAX);
   }
 
   //Pre-calc twiddles
-  for(n=0; n<(size>>1); n++){
-      typed = (double)(twoPI*n/size);
+  for(n=0; n<(FFT_SIZE>>1); n++){
+      typed = (double)(twoPI*n/FFT_SIZE);
       data.real_twid[n] = cos(typed);
       data.img_twid[n] = (-1.0)*sin(typed);
   }
