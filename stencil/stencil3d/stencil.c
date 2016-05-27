@@ -7,8 +7,6 @@ SC 2008
 
 #include "stencil.h"
 
-int INDX(_row_size,_col_size,_i,_j,_k){return ((_i)+_row_size*((_j)+_col_size*(_k)));}
-
 void stencil3d(TYPE C[2], TYPE orig[SIZE], TYPE sol[SIZE]) {
     int i, j, k;
     TYPE sum0, sum1, mul0, mul1;

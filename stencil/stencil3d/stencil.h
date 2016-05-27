@@ -19,8 +19,7 @@ SC 2008
 #define MIN 1
 //Convenience Macros
 #define SIZE (row_size * col_size * height_size)
-//#define INDX(_row_size,_col_size,_i,_j,_k) ((_i)+_row_size*((_j)+_col_size*(_k)))
-int INDX(int _row_size,int _col_size,int _i,int _j,int _k);
+#define INDX(_row_size,_col_size,_i,_j,_k) ((_i)+_row_size*((_j)+_col_size*(_k)))
 
 void stencil3d( TYPE C[2], TYPE orig[SIZE], TYPE sol[SIZE] );
 
