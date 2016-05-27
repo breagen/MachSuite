@@ -1,12 +1,12 @@
 #include "fft.h"
 
-void fft(double real[size], double img[size], double real_twid[size/2], double img_twid[size/2]){
+void fft(double real[FFT_SIZE], double img[FFT_SIZE], double real_twid[FFT_SIZE/2], double img_twid[FFT_SIZE/2]){
     int even, odd, span, log, rootindex;
     double temp;
     log = 0;
 
-    for(span=size>>1; span; span>>=1, log++){
-        for(odd=span; odd<size; odd++){
+    for(span=FFT_SIZE>>1; span; span>>=1, log++){
+        for(odd=span; odd<FFT_SIZE; odd++){
             odd |= span;
             even = odd ^ span;
 
@@ -18,7 +18,7 @@ void fft(double real[size], double img[size], double real_twid[size/2], double i
             img[odd] = img[even] - img[odd];
             img[even] = temp;
 
-            rootindex = (even<<log) & (size - 1);
+            rootindex = (even<<log) & (FFT_SIZE - 1);
             if(rootindex){
                 temp = real_twid[rootindex] * real[odd] -
                     img_twid[rootindex]  * img[odd];
