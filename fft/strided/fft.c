@@ -5,8 +5,8 @@ void fft(double real[FFT_SIZE], double img[FFT_SIZE], double real_twid[FFT_SIZE/
     double temp;
     log = 0;
 
-    for(span=FFT_SIZE>>1; span; span>>=1, log++){
-        for(odd=span; odd<FFT_SIZE; odd++){
+    outer:for(span=FFT_SIZE>>1; span; span>>=1, log++){
+        inner:for(odd=span; odd<FFT_SIZE; odd++){
             odd |= span;
             even = odd ^ span;
 
