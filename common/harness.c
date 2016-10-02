@@ -68,6 +68,8 @@ int main(int argc, char **argv)
     return -1;
   }
   #endif
+  free(data);
+  free(ref);
 
   printf("Success.\n");
   return 0;
