@@ -38,6 +38,7 @@ void input_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,4);
   STAC(parse_,TYPE,_array)(s, data->emission, N_STATES*N_TOKENS);
+  free(p);
 }
 
 void data_to_input(int fd, void *vdata) {
@@ -71,6 +72,7 @@ void output_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,1);
   parse_uint8_t_array(s, data->path, N_OBS);
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {

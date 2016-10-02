@@ -38,6 +38,7 @@ void input_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,4);
   parse_double_array(s, data->img_twid, FFT_SIZE/2);
+  free(p);
 }
 
 void data_to_input(int fd, void *vdata) {
@@ -76,6 +77,7 @@ void output_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,2);
   parse_double_array(s, data->img, FFT_SIZE);
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {

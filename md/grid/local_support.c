@@ -30,6 +30,7 @@ void input_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,2);
   STAC(parse_,TYPE,_array)(s, (double *)(data->position), 3*blockSide*blockSide*blockSide*densityFactor);
+  free(p);
 }
 
 void data_to_input(int fd, void *vdata) {
@@ -58,6 +59,7 @@ void output_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,1);
   STAC(parse_,TYPE,_array)(s, (double *)data->force, 3*blockSide*blockSide*blockSide*densityFactor);
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {

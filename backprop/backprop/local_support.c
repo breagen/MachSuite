@@ -51,6 +51,7 @@ void input_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,8);
   STAC(parse_,TYPE,_array)(s, data->training_targets, training_sets*possible_outputs);
+  free(p);
 }
 
 void data_to_input(int fd, void *vdata) {
@@ -111,6 +112,7 @@ void output_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,6);
   STAC(parse_,TYPE,_array)(s, data->biases3, possible_outputs);
+  free(p);
 
 }
 

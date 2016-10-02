@@ -28,6 +28,7 @@ void input_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,2);
   STAC(parse_,TYPE,_array)(s, data->work_y, 512);
+  free(p);
 }
 
 void data_to_input(int fd, void *vdata) {
@@ -58,6 +59,7 @@ void output_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,2);
   STAC(parse_,TYPE,_array)(s, data->work_y, 512);
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {
