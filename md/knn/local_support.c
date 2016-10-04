@@ -42,7 +42,7 @@ void input_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,4);
   parse_int32_t_array(s, data->NL, nAtoms*maxNeighbors);
-
+  free(p);
 }
 
 void data_to_input(int fd, void *vdata) {
@@ -87,7 +87,7 @@ void output_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,3);
   STAC(parse_,TYPE,_array)(s, data->force_z, nAtoms);
-
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {

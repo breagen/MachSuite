@@ -48,6 +48,7 @@ void input_to_data(int fd, void *vdata) {
   // Section 3: edge structures
   s = find_section_start(p,3);
   parse_uint64_t_array(s, (uint64_t *)(data->edges), N_EDGES);
+  free(p);
 }
 
 void data_to_input(int fd, void *vdata) {
@@ -87,6 +88,7 @@ void output_to_data(int fd, void *vdata) {
   // Section 1: horizon counts
   s = find_section_start(p,1);
   parse_uint64_t_array(s, data->level_counts, N_LEVELS);
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {

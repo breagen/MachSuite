@@ -28,6 +28,7 @@ void input_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,2);
   parse_string(s, data->input, STRING_SIZE);
+  free(p);
 }
 
 void data_to_input(int fd, void *vdata) {
@@ -55,6 +56,7 @@ void output_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,1);
   parse_int32_t_array(s, data->n_matches, 1);
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {

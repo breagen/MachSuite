@@ -30,6 +30,7 @@ void input_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,2);
   STAC(parse_,TYPE,_array)(s, data->m2, N);
+  free(p);
 
 }
 
@@ -56,6 +57,7 @@ void output_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,1);
   STAC(parse_,TYPE,_array)(s, data->prod, N);
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {

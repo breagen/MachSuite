@@ -28,6 +28,7 @@ void input_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,2);
   parse_string(s, data->seqB, BLEN);
+  free(p);
 
 }
 
@@ -63,6 +64,7 @@ void output_to_data(int fd, void *vdata) {
 
   s = find_section_start(p,2);
   parse_string(s, data->alignedB, ALEN+BLEN);
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {

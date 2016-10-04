@@ -28,6 +28,7 @@ void input_to_data(int fd, void *vdata) {
   // Section 2: input-text
   s = find_section_start(p,2);
   parse_uint8_t_array(s, data->buf, 16);
+  free(p);
 }
 
 void data_to_input(int fd, void *vdata) {
@@ -56,6 +57,7 @@ void output_to_data(int fd, void *vdata) {
   // Section 1: output-text
   s = find_section_start(p,1);
   parse_uint8_t_array(s, data->buf, 16);
+  free(p);
 }
 
 void data_to_output(int fd, void *vdata) {
