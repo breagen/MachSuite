@@ -1,0 +1,35 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Biuld host",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-g",
+                "-march=native",
+                "-O3",
+                "-opt-prefetch",
+//                "-std=c++98",
+                "-I/usr/include/",
+                "-I${workspaceFolder}/",
+                "-I${workspaceFolder}/../../common/",
+                "-I/tools/Xilinx/Vivado/2018.3/include/",
+                "${workspaceFolder}/bfs.c",
+                "${workspaceFolder}/local_support.c",
+                "${workspaceFolder}/../../common/support.c",
+                "${workspaceFolder}/../../common/harness.c",
+                "-o",
+                "${workspaceFolder}/build/host",
+            ],
+            "options": {
+                "cwd": "/usr/bin"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        }
+    ]
+}
