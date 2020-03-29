@@ -23,16 +23,16 @@
 int main(int argc, char **argv)
 {
 
-  printf("-> Starting the program. Number of argc: %d", argc);
+  printf("-> Starting the program...\n");
   // Parse command line.
   const char *in_file;
 #ifdef CHECK_OUTPUT
   const char *check_file;
 #endif
   
-  if (argc < 4)
+  if (argc != 3)
   {
-    printf("x> Usage: ./benchmark <input_file> <check_file>");
+    printf("x> Usage: sudo %s <input_file> <check_file>\n", argv[0]);
     return -1;
   }
 

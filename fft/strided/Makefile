@@ -85,8 +85,7 @@ else
 	$(info "This Release Doesn't Support Automated Hardware Execution")
 endif
 
-#all: clean help platform exec
-all: clean help exec host
+all: clean help host exec
 
 
 help:
