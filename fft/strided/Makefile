@@ -14,7 +14,6 @@ TARGET := emu
 
 DSA_PATH := ./DSA/ultra.dsa
 OVERLAY := bfs_bulk
-ELF_FILE := host
 BOARD := ZCU102
 PROC := psu_cortexa53
 TARGET_OS := linux
@@ -71,7 +70,6 @@ OBJECTS = $(TEST_DIR)/fft.o
 OBJECTS += $(TEST_DIR)/local_support.o
 LOGFILE = $(TEST_DIR)/_sds/reports/sds.log
 
-
 # Check Rule Builds the Sources and Executes on Specified Target
 check: all
 ifneq ($(TARGET), hw)
@@ -88,18 +86,7 @@ else
 endif
 
 #all: clean help platform exec
-all: clean help exec
-
-
-platform:
-	@mkdir -p ./$(BOARD)/hw
-	@mkdir -p ./$(BOARD)/platforms
-	@cp -rf $(DSA_PATH) ./$(BOARD)/hw/$(OVERLAY).dsa
-	xsct -sdx build_pfm.tcl $(OVERLAY) $(BOARD) $(PROC)
-	@cp -rf .build/$(OVERLAY)/export/$(OVERLAY) \
-	$(BOARD)/platforms/$(OVERLAY)
-	@echo "Successfully finished building SDx platform."
-	@echo "SDx platform stored in $(BOARD)/platforms/$(OVERLAY)."
+all: clean help exec host
 
 
 help:
@@ -131,11 +118,14 @@ help:
 #	@echo "     SYSROOT=$(SYSROOT)"
 	@echo
 
+host:
+	$(MAKE) -C $(CURDIR)/../../common
+
 exec: cleantest $(OBJECTS)
 	@mkdir -p $(TEST_DIR)
 	@echo 'Building Target: $@'
 	@echo 'Trigerring: SDS++ Linker'
-	cd $(TEST_DIR) ; $(C_COMP) -I$(CURDIR)/../../common $(CURDIR)/../../common/support.c $(CURDIR)/../../common/harness.c -Wall $(LDFLAGS) -o $(ELF_FILE) $(OBJECTS) $(EMU_FLAGS)
+	cd $(TEST_DIR) ; $(C_COMP) -Wall  $(CURDIR)/../../common/build/support.o $(CURDIR)/../../common/build/harness.o $(LDFLAGS) -o $(OVERLAY) $(OBJECTS) $(EMU_FLAGS)
 	@echo 'SDx Completed Building Target: $@'
 	@echo
 	@tput setaf 2; \

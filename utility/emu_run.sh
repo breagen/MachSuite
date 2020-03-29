@@ -11,7 +11,6 @@ cd /mnt/
 reboot
 EOT
 echo $PWD/_sds/init.sh >> "_sds/emulation/sd_card.manifest"
-echo $PWD/../../data/ >> "_sds/emulation/sd_card.manifest"
 mv init.sh _sds
 sdsoc_emulator -graphic-xsim -no-reboot |tee emulator.log
 fi

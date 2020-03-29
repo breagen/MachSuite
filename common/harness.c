@@ -22,12 +22,20 @@
 
 int main(int argc, char **argv)
 {
+
+  printf("-> Starting the program. Number of argc: %d", argc);
   // Parse command line.
   const char *in_file;
 #ifdef CHECK_OUTPUT
   const char *check_file;
 #endif
-  assert(argc < 4 && "Usage: ./benchmark <input_file> <check_file>");
+  
+  if (argc < 4)
+  {
+    printf("x> Usage: ./benchmark <input_file> <check_file>");
+    return -1;
+  }
+
   in_file = "input.data";
 #ifdef CHECK_OUTPUT
   check_file = "check.data";
@@ -42,22 +50,22 @@ int main(int argc, char **argv)
   // Load input data
   int in_fd;
   char *data;
-  data = (char *)generic_alloc(INPUT_SIZE);
+  data = generic_alloc(INPUT_SIZE);
   assert(data != NULL && "Out of memory");
   in_fd = open(in_file, O_RDONLY);
   assert(in_fd > 0 && "Couldn't open input data file");
   input_to_data(in_fd, data);
 
 #ifdef __SDSCC__
-  sds_utils::perf_counter compute_Total;
-  compute_Total.start();
+  reset();
+  start();
 #endif
 
   // Unpack and call
   run_benchmark(data);
 
 #ifdef __SDSCC__
-  compute_Total.stop();
+  stop();
 #endif
 
 #ifdef WRITE_OUTPUT
@@ -72,7 +80,7 @@ int main(int argc, char **argv)
 #ifdef CHECK_OUTPUT
   int check_fd;
   char *ref;
-  ref = (char *)malloc(INPUT_SIZE);
+  ref = generic_alloc(INPUT_SIZE);
   assert(ref != NULL && "Out of memory");
   check_fd = open(check_file, O_RDONLY);
   assert(check_fd > 0 && "Couldn't open check data file");
@@ -87,13 +95,15 @@ int main(int argc, char **argv)
     return -1;
   }
 #endif
-  free(data);
-  free(ref);
+  generic_free(data);
+  generic_free(ref);
 
 #ifdef __SDSCC__
-  uint64_t compute_Total_avg = compute_Total.avg_cpu_cycles();
+  uint64_t compute_Total_avg = avg_cpu_cycles();
+  float delay = (compute_Total_avg * (1000000.0 / (sds_clock_frequency())));
   //AP freq is 1.5GHz
-  std::cout << "-> Number of CPU cycles halted for kernel " << compute_Total_avg << "\t~\t" << (float)((compute_Total_avg * (1 / (1.5 * 1000000)))) << "(mS)" << std::endl;
+  printf("-> Number of CPU cycles halted for kernel %d \t~\t %f(uS).\n", compute_Total_avg, delay);
+  printf("-> For this AP Thick/S is %d.\n", sds_clock_frequency());
 #endif
 
   printf("Success.\n");
