@@ -1,3 +1,5 @@
+#ifndef __BFS_BULK_HEADER__
+#define __BFS_BULK_HEADER__
 /*
 Implementations based on:
 Harish and Narayanan. "Accelerating large graph algorithms on the GPU using CUDA." HiPC, 2007.
@@ -15,8 +17,8 @@ Hong, Oguntebi, Olukotun. "Efficient Parallel Graph Exploration on Multi-Core CP
 #define SCALE 8
 #define EDGE_FACTOR 16
 
-#define N_NODES (1LL<<SCALE)
-#define N_EDGES (N_NODES*EDGE_FACTOR)
+#define N_NODES (1LL << SCALE)
+#define N_EDGES (N_NODES * EDGE_FACTOR)
 
 // upper limit
 #define N_LEVELS 10
@@ -25,14 +27,16 @@ Hong, Oguntebi, Olukotun. "Efficient Parallel Graph Exploration on Multi-Core CP
 typedef uint64_t edge_index_t;
 typedef uint64_t node_index_t;
 
-typedef struct edge_t_struct {
+typedef struct edge_t_struct
+{
   // These fields are common in practice, but we elect not to use them.
   //weight_t weight;
   //node_index_t src;
   node_index_t dst;
 } edge_t;
 
-typedef struct node_t_struct {
+typedef struct node_t_struct
+{
   edge_index_t edge_begin;
   edge_index_t edge_end;
 } node_t;
@@ -43,7 +47,8 @@ typedef int8_t level_t;
 ////////////////////////////////////////////////////////////////////////////////
 // Test harness interface code.
 
-struct bench_args_t {
+struct bench_args_t
+{
   node_t nodes[N_NODES];
   edge_t edges[N_EDGES];
   node_index_t starting_node;
@@ -51,5 +56,31 @@ struct bench_args_t {
   edge_index_t level_counts[N_LEVELS];
 };
 
-void bfs(node_t nodes[N_NODES], edge_t edges[N_EDGES], node_index_t starting_node, level_t level[N_NODES], edge_index_t level_counts[N_LEVELS]);
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
+#pragma SDS data zero_copy( \
+    nodes [0:N_NODES],      \
+    edges [0:N_EDGES],      \
+    level [0:N_NODES],      \
+    level_counts [0:N_LEVELS])
+
+#pragma SDS data access_pattern( \
+    nodes                        \
+    : SEQUENTIAL,                \
+      edges                      \
+    : SEQUENTIAL,                \
+      level                      \
+    : SEQUENTIAL,                \
+      level_counts               \
+    : SEQUENTIAL)
+
+  void bfs(node_t nodes[N_NODES], edge_t edges[N_EDGES], node_index_t starting_node, level_t level[N_NODES], edge_index_t level_counts[N_LEVELS]);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

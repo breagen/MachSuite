@@ -1,13 +1,34 @@
 #include "fft.h"
 #include <string.h>
 
+#ifdef __SDSCC__
+#include "utils/sds_utils.h"
+#endif
+
 int INPUT_SIZE = sizeof(struct bench_args_t);
 
 #define EPSILON ((double)1.0e-6)
 
-void run_benchmark( void *vargs ) {
+void run_benchmark(void *vargs)
+{
   struct bench_args_t *args = (struct bench_args_t *)vargs;
-  fft(args->real, args->img, args->real_twid, args->img_twid );
+#ifdef __SDSCC__
+  reset();
+  start();
+#endif
+
+  fft(args->real, args->img, args->real_twid, args->img_twid);
+
+#ifdef __SDSCC__
+  stop();
+
+  uint64_t compute_Total_avg = avg_cpu_cycles();
+  double delay = (compute_Total_avg * (1000000.0 / (sds_clock_frequency())));
+  //AP freq is 1.2GHz
+  printf("-> Number of CPU cycles halted for kernel %llu \t~\t %f(uS).\n", compute_Total_avg, delay);
+  printf("-> For this AP Thick/S is %d.\n", sds_clock_frequency());
+#endif
+
 }
 
 /* Input format:
@@ -21,27 +42,29 @@ double: twiddle factor (real part)
 double: twiddle factor (complex part)
 */
 
-void input_to_data(int fd, void *vdata) {
+void input_to_data(int fd, void *vdata)
+{
   struct bench_args_t *data = (struct bench_args_t *)vdata;
   char *p, *s;
   // Load input string
   p = readfile(fd);
 
-  s = find_section_start(p,1);
+  s = find_section_start(p, 1);
   parse_double_array(s, data->real, FFT_SIZE);
 
-  s = find_section_start(p,2);
+  s = find_section_start(p, 2);
   parse_double_array(s, data->img, FFT_SIZE);
 
-  s = find_section_start(p,3);
-  parse_double_array(s, data->real_twid, FFT_SIZE/2);
+  s = find_section_start(p, 3);
+  parse_double_array(s, data->real_twid, FFT_SIZE / 2);
 
-  s = find_section_start(p,4);
-  parse_double_array(s, data->img_twid, FFT_SIZE/2);
+  s = find_section_start(p, 4);
+  parse_double_array(s, data->img_twid, FFT_SIZE / 2);
   free(p);
 }
 
-void data_to_input(int fd, void *vdata) {
+void data_to_input(int fd, void *vdata)
+{
   struct bench_args_t *data = (struct bench_args_t *)vdata;
 
   write_section_header(fd);
@@ -51,10 +74,10 @@ void data_to_input(int fd, void *vdata) {
   write_double_array(fd, data->img, FFT_SIZE);
 
   write_section_header(fd);
-  write_double_array(fd, data->real_twid, FFT_SIZE/2);
+  write_double_array(fd, data->real_twid, FFT_SIZE / 2);
 
   write_section_header(fd);
-  write_double_array(fd, data->img_twid, FFT_SIZE/2);
+  write_double_array(fd, data->img_twid, FFT_SIZE / 2);
 }
 
 /* Output format:
@@ -64,23 +87,25 @@ double: freq (real part)
 double: freq (complex part)
 */
 
-void output_to_data(int fd, void *vdata) {
+void output_to_data(int fd, void *vdata)
+{
   struct bench_args_t *data = (struct bench_args_t *)vdata;
   char *p, *s;
   // Zero-out everything.
-  memset(vdata,0,sizeof(struct bench_args_t));
+  memset(vdata, 0, sizeof(struct bench_args_t));
   // Load input string
   p = readfile(fd);
 
-  s = find_section_start(p,1);
+  s = find_section_start(p, 1);
   parse_double_array(s, data->real, FFT_SIZE);
 
-  s = find_section_start(p,2);
+  s = find_section_start(p, 2);
   parse_double_array(s, data->img, FFT_SIZE);
   free(p);
 }
 
-void data_to_output(int fd, void *vdata) {
+void data_to_output(int fd, void *vdata)
+{
   struct bench_args_t *data = (struct bench_args_t *)vdata;
 
   write_section_header(fd);
@@ -90,22 +115,24 @@ void data_to_output(int fd, void *vdata) {
   write_double_array(fd, data->img, FFT_SIZE);
 }
 
-int check_data( void *vdata, void *vref ) {
+int check_data(void *vdata, void *vref)
+{
   struct bench_args_t *data = (struct bench_args_t *)vdata;
   struct bench_args_t *ref = (struct bench_args_t *)vref;
   int has_errors = 0;
   int i;
   double real_diff, img_diff;
 
-  for(i=0; i<FFT_SIZE; i++) {
+  for (i = 0; i < FFT_SIZE; i++)
+  {
     real_diff = data->real[i] - ref->real[i];
     img_diff = data->img[i] - ref->img[i];
-    has_errors |= (real_diff<-EPSILON) || (EPSILON<real_diff);
+    has_errors |= (real_diff < -EPSILON) || (EPSILON < real_diff);
     //if( has_errors )
-      //printf("%d (real): %f (%f)\n", i, real_diff, EPSILON);
-    has_errors |= (img_diff<-EPSILON) || (EPSILON<img_diff);
+    //printf("%d (real): %f (%f)\n", i, real_diff, EPSILON);
+    has_errors |= (img_diff < -EPSILON) || (EPSILON < img_diff);
     //if( has_errors )
-      //printf("%d (img): %f (%f)\n", i, img_diff, EPSILON);
+    //printf("%d (img): %f (%f)\n", i, img_diff, EPSILON);
   }
 
   // Return true if it's correct.

@@ -12,28 +12,63 @@ In Proceedings of the 3rd Workshop on General-Purpose Computation on Graphics Pr
 #define TYPE double
 
 // Problem Constants
-#define nAtoms        256
-#define maxNeighbors  16
+#define nAtoms 256
+#define maxNeighbors 16
 // LJ coefficients
-#define lj1           1.5
-#define lj2           2.0
+#define lj1 1.5
+#define lj2 2.0
 
-void md_kernel(TYPE force_x[nAtoms],
-               TYPE force_y[nAtoms],
-               TYPE force_z[nAtoms],
-               TYPE position_x[nAtoms],
-               TYPE position_y[nAtoms],
-               TYPE position_z[nAtoms],
-               int32_t NL[nAtoms*maxNeighbors]);
-////////////////////////////////////////////////////////////////////////////////
-// Test harness interface code.
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-struct bench_args_t {
+#pragma SDS data zero_copy( \
+    force_x [0:nAtoms],     \
+    force_y [0:nAtoms],     \
+    force_z [0:nAtoms],     \
+    position_x [0:nAtoms],  \
+    position_y [0:nAtoms],  \
+    position_z [0:nAtoms],  \
+    NL [0:nAtoms * maxNeighbors])
+
+#pragma SDS data access_pattern( \
+    force_x                      \
+    : SEQUENTIAL,                \
+      force_y                    \
+    : SEQUENTIAL,                \
+      force_z                    \
+    : SEQUENTIAL,                \
+      position_x                 \
+    : SEQUENTIAL,                \
+      position_y                 \
+    : SEQUENTIAL,                \
+      position_z                 \
+    : SEQUENTIAL,                \
+      NL                         \
+    : SEQUENTIAL)
+
+  void md_kernel(TYPE force_x[nAtoms],
+                 TYPE force_y[nAtoms],
+                 TYPE force_z[nAtoms],
+                 TYPE position_x[nAtoms],
+                 TYPE position_y[nAtoms],
+                 TYPE position_z[nAtoms],
+                 int32_t NL[nAtoms * maxNeighbors]);
+  ////////////////////////////////////////////////////////////////////////////////
+  // Test harness interface code.
+
+#ifdef __cplusplus
+}
+#endif
+
+struct bench_args_t
+{
   TYPE force_x[nAtoms];
   TYPE force_y[nAtoms];
   TYPE force_z[nAtoms];
   TYPE position_x[nAtoms];
   TYPE position_y[nAtoms];
   TYPE position_z[nAtoms];
-  int32_t NL[nAtoms*maxNeighbors];
+  int32_t NL[nAtoms * maxNeighbors];
 };
