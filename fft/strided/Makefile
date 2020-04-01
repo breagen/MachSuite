@@ -13,7 +13,7 @@ TARGET := emu
 
 
 DSA_PATH := ./DSA/ultra.dsa
-OVERLAY := bfs_bulk
+OVERLAY := fft_str
 BOARD := ZCU102
 PROC := psu_cortexa53
 TARGET_OS := linux

@@ -56,17 +56,8 @@ int main(int argc, char **argv)
   assert(in_fd > 0 && "Couldn't open input data file");
   input_to_data(in_fd, data);
 
-#ifdef __SDSCC__
-  reset();
-  start();
-#endif
-
   // Unpack and call
   run_benchmark(data);
-
-#ifdef __SDSCC__
-  stop();
-#endif
 
 #ifdef WRITE_OUTPUT
   int out_fd;
@@ -97,14 +88,6 @@ int main(int argc, char **argv)
 #endif
   generic_free(data);
   generic_free(ref);
-
-#ifdef __SDSCC__
-  uint64_t compute_Total_avg = avg_cpu_cycles();
-  float delay = (compute_Total_avg * (1000000.0 / (sds_clock_frequency())));
-  //AP freq is 1.5GHz
-  printf("-> Number of CPU cycles halted for kernel %d \t~\t %f(uS).\n", compute_Total_avg, delay);
-  printf("-> For this AP Thick/S is %d.\n", sds_clock_frequency());
-#endif
 
   printf("Success.\n");
   return 0;

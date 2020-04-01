@@ -15,15 +15,29 @@
 //Set number of iterations to execute
 #define MAX_ITERATION 1
 
-void stencil( TYPE orig[row_size * col_size],
-        TYPE sol[row_size * col_size],
-        TYPE filter[f_size] );
+#pragma SDS data zero_copy(       \
+    orig [0:row_size * col_size], \
+    sol [0:row_size * col_size],  \
+    filter [0:f_size])
+
+#pragma SDS data access_pattern( \
+    orig                         \
+    : SEQUENTIAL,                \
+      sol                        \
+    : SEQUENTIAL,                \
+      filter                     \
+    : SEQUENTIAL)
+
+void stencil(TYPE orig[row_size * col_size],
+             TYPE sol[row_size * col_size],
+             TYPE filter[f_size]);
 
 ////////////////////////////////////////////////////////////////////////////////
 // Test harness interface code.
 
-struct bench_args_t {
-    TYPE orig[row_size*col_size];
-    TYPE sol[row_size*col_size];
+struct bench_args_t
+{
+    TYPE orig[row_size * col_size];
+    TYPE sol[row_size * col_size];
     TYPE filter[f_size];
 };

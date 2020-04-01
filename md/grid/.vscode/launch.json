@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Build and run host",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/host",
+            "args": [
+                "./input.data",
+                "./check.data"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            /*
+            "environment": [
+                {
+                    "name": "LD_LIBRARY_PATH",
+                    "value": "/tools/Xilinx/Vivado/2018.3/lnx64/tools/opencv/opencv_gcc/"
+                }
+            ],
+            */
+            "externalConsole": false, //set to true to see output in cmd instead
+            "MIMode": "gdb",
+            "miDebuggerPath": "gdb",
+            "miDebuggerArgs": "--cd=${workspaceFolder}",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "Biuld host"
+        },
+    ]
+}
